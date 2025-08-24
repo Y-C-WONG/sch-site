@@ -1,0 +1,451 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import Hero from '../components/Hero.astro'
+import { MapPin, Phone, Mail, Clock, Send, User, MessageCircle } from 'lucide-astro'
+---
+
+<Layout 
+  title="Contact Us - International School" 
+  description="Get in touch with International School. Find our location, contact information, office hours, and send us a message. We're here to help with all your inquiries."
+>
+  <Header />
+  
+  <!-- Hero Section -->
+  <Hero 
+    title="Contact Us"
+    subtitle="Get in Touch"
+    description="We're here to answer your questions and help you discover how International School can provide the perfect educational environment for your child."
+    ctaText="Send Message"
+    ctaLink="#contact-form"
+    backgroundImage="/images/hero-school.png"
+  />
+
+  <!-- Contact Information -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-3 gap-8">
+        
+        <!-- Main Contact -->
+        <div class="bg-primary-50 rounded-xl p-8 text-center">
+          <Phone class="h-12 w-12 text-primary-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Phone</h3>
+          <p class="text-gray-600 mb-4">Call us during business hours for immediate assistance</p>
+          <div class="space-y-2">
+            <div>
+              <div class="font-semibold text-gray-900">Main Office</div>
+              <div class="text-primary-600 text-lg font-medium">+1-555-0123</div>
+            </div>
+            <div>
+              <div class="font-semibold text-gray-900">Admissions</div>
+              <div class="text-primary-600 text-lg font-medium">+1-555-0124</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="bg-blue-50 rounded-xl p-8 text-center">
+          <Mail class="h-12 w-12 text-blue-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Email</h3>
+          <p class="text-gray-600 mb-4">Send us an email and we'll respond within 24 hours</p>
+          <div class="space-y-2">
+            <div>
+              <div class="font-semibold text-gray-900">General Information</div>
+              <div class="text-blue-600 font-medium">info@school.edu</div>
+            </div>
+            <div>
+              <div class="font-semibold text-gray-900">Admissions</div>
+              <div class="text-blue-600 font-medium">admissions@school.edu</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="bg-green-50 rounded-xl p-8 text-center">
+          <MapPin class="h-12 w-12 text-green-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Visit Us</h3>
+          <p class="text-gray-600 mb-4">Come see our campus and facilities in person</p>
+          <div class="space-y-2">
+            <div class="font-semibold text-gray-900">Address</div>
+            <div class="text-green-600">
+              123 School Street<br />
+              City, State 12345<br />
+              Country
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Office Hours & Map -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12">
+        
+        <!-- Office Hours -->
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">Office Hours</h2>
+          <p class="text-lg text-gray-600 mb-8">
+            Our offices are open during the following hours. For urgent matters outside these times, please call our emergency number.
+          </p>
+
+          <div class="space-y-6">
+            
+            <!-- Main Office -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+              <div class="flex items-center mb-4">
+                <Clock class="h-6 w-6 text-primary-500 mr-3" />
+                <h3 class="text-xl font-semibold text-gray-900">Main Office</h3>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <div class="font-medium text-gray-900 mb-2">Monday - Friday</div>
+                  <div class="text-gray-600">8:00 AM - 5:00 PM</div>
+                </div>
+                <div>
+                  <div class="font-medium text-gray-900 mb-2">Saturday</div>
+                  <div class="text-gray-600">9:00 AM - 1:00 PM</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Admissions Office -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+              <div class="flex items-center mb-4">
+                <User class="h-6 w-6 text-blue-500 mr-3" />
+                <h3 class="text-xl font-semibold text-gray-900">Admissions Office</h3>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <div class="font-medium text-gray-900 mb-2">Monday - Friday</div>
+                  <div class="text-gray-600">8:30 AM - 4:30 PM</div>
+                </div>
+                <div>
+                  <div class="font-medium text-gray-900 mb-2">Saturday</div>
+                  <div class="text-gray-600">By Appointment</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="bg-red-50 border border-red-200 rounded-xl p-6">
+              <h4 class="font-semibold text-gray-900 mb-2">Emergency Contact</h4>
+              <p class="text-sm text-gray-600 mb-2">
+                For urgent matters outside office hours:
+              </p>
+              <div class="text-red-600 font-medium">+1-555-0199</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Location</h2>
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Embedded Google Map -->
+            <div class="aspect-w-16 aspect-h-12">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.67890!2d-74.006!3d40.7128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjEiTiA3NMKwMDAnMjEuNiJX!5e0!3m2!1sen!2sus!4v1234567890"
+                width="100%"
+                height="400"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                class="w-full h-96"
+              ></iframe>
+            </div>
+            
+            <!-- Map Footer -->
+            <div class="p-6">
+              <div class="flex items-start">
+                <MapPin class="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                <div>
+                  <div class="font-semibold text-gray-900 mb-1">International School</div>
+                  <div class="text-gray-600 text-sm">
+                    123 School Street<br />
+                    City, State 12345<br />
+                    Country
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4 pt-4 border-t border-gray-200">
+                <p class="text-sm text-gray-600">
+                  <strong>Directions:</strong> Located in the heart of the education district, easily accessible by public transportation and major highways.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form -->
+  <section id="contact-form" class="py-16 bg-white" style="display: none;">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Send Us a Message</h2>
+        <p class="text-xl text-gray-600">
+          Have a question or want to learn more? Fill out the form below and we'll get back to you promptly.
+        </p>
+      </div>
+
+      <div class="bg-gray-50 rounded-xl p-8">
+        <form class="space-y-6">
+          
+          <!-- Personal Information -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label for="first-name" class="block text-sm font-medium text-gray-700 mb-2">
+                First Name *
+              </label>
+              <input 
+                type="text" 
+                id="first-name" 
+                name="first-name" 
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="Your first name"
+              />
+            </div>
+            
+            <div>
+              <label for="last-name" class="block text-sm font-medium text-gray-700 mb-2">
+                Last Name *
+              </label>
+              <input 
+                type="text" 
+                id="last-name" 
+                name="last-name" 
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="Your last name"
+              />
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                Email Address *
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="your.email@example.com"
+              />
+            </div>
+            
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number
+              </label>
+              <input 
+                type="tel" 
+                id="phone" 
+                name="phone"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="+1 (555) 123-4567"
+              />
+            </div>
+          </div>
+
+          <!-- Inquiry Type -->
+          <div>
+            <label for="inquiry-type" class="block text-sm font-medium text-gray-700 mb-2">
+              Inquiry Type *
+            </label>
+            <select 
+              id="inquiry-type" 
+              name="inquiry-type" 
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            >
+              <option value="">Select inquiry type</option>
+              <option value="admissions">Admissions & Enrollment</option>
+              <option value="academics">Academic Programs</option>
+              <option value="facilities">Campus & Facilities</option>
+              <option value="fees">Tuition & Fees</option>
+              <option value="events">School Events</option>
+              <option value="general">General Information</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <!-- Student Information (Optional) -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label for="student-name" class="block text-sm font-medium text-gray-700 mb-2">
+                Student Name (if applicable)
+              </label>
+              <input 
+                type="text" 
+                id="student-name" 
+                name="student-name"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="Student's full name"
+              />
+            </div>
+            
+            <div>
+              <label for="student-grade" class="block text-sm font-medium text-gray-700 mb-2">
+                Current/Intended Grade
+              </label>
+              <select 
+                id="student-grade" 
+                name="student-grade"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="">Select grade</option>
+                <option value="kindergarten">Kindergarten</option>
+                <option value="grade-1">Grade 1</option>
+                <option value="grade-2">Grade 2</option>
+                <option value="grade-3">Grade 3</option>
+                <option value="grade-4">Grade 4</option>
+                <option value="grade-5">Grade 5</option>
+                <option value="grade-6">Grade 6</option>
+                <option value="grade-7">Grade 7</option>
+                <option value="grade-8">Grade 8</option>
+                <option value="grade-9">Grade 9</option>
+                <option value="grade-10">Grade 10</option>
+                <option value="grade-11">Grade 11</option>
+                <option value="grade-12">Grade 12</option>
+                <option value="grade-13">Grade 13</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Message -->
+          <div>
+            <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+              Message *
+            </label>
+            <textarea 
+              id="message" 
+              name="message" 
+              rows="6" 
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="Please tell us how we can help you..."
+            ></textarea>
+          </div>
+
+          <!-- Preferred Contact Method -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Preferred Contact Method
+            </label>
+            <div class="flex flex-wrap gap-4">
+              <label class="flex items-center">
+                <input 
+                  type="radio" 
+                  name="contact-method" 
+                  value="email" 
+                  checked
+                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                />
+                <span class="ml-2 text-sm text-gray-700">Email</span>
+              </label>
+              <label class="flex items-center">
+                <input 
+                  type="radio" 
+                  name="contact-method" 
+                  value="phone"
+                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                />
+                <span class="ml-2 text-sm text-gray-700">Phone</span>
+              </label>
+              <label class="flex items-center">
+                <input 
+                  type="radio" 
+                  name="contact-method" 
+                  value="either"
+                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                />
+                <span class="ml-2 text-sm text-gray-700">Either</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Newsletter Signup -->
+          <div class="border-t border-gray-200 pt-6">
+            <label class="flex items-start">
+              <input 
+                type="checkbox" 
+                name="newsletter" 
+                value="yes"
+                class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              />
+              <span class="ml-3 text-sm text-gray-600">
+                I would like to receive updates about school news, events, and admissions information via email.
+              </span>
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="text-center pt-6">
+            <button 
+              type="submit"
+              class="inline-flex items-center px-8 py-4 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 transition-all duration-200 transform hover:scale-105 shadow-lg"
+            >
+              <Send class="h-5 w-5 mr-2" />
+              Send Message
+            </button>
+            
+            <p class="mt-4 text-sm text-gray-600">
+              We typically respond to inquiries within 24 hours during business days.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Quick Links</h2>
+        <p class="text-xl text-gray-600">
+          Looking for something specific? These links might help you find what you need faster.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <a href="/academic-year" class="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300 group">
+          <User class="h-10 w-10 text-blue-600 mx-auto mb-3 group-hover:scale-110 transition-transform duration-200" />
+          <h3 class="font-semibold text-gray-900 mb-2">Admissions</h3>
+          <p class="text-sm text-gray-600">Application process, requirements, and deadlines</p>
+        </a>
+
+        <a href="/academic-programs" class="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300 group">
+          <MessageCircle class="h-10 w-10 text-green-600 mx-auto mb-3 group-hover:scale-110 transition-transform duration-200" />
+          <h3 class="font-semibold text-gray-900 mb-2">Programs</h3>
+          <p class="text-sm text-gray-600">Academic curriculum and special programs</p>
+        </a>
+
+        <a href="/campus-facilities" class="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300 group">
+          <MapPin class="h-10 w-10 text-purple-600 mx-auto mb-3 group-hover:scale-110 transition-transform duration-200" />
+          <h3 class="font-semibold text-gray-900 mb-2">Campus Tour</h3>
+          <p class="text-sm text-gray-600">Schedule a visit to see our facilities</p>
+        </a>
+
+        <a href="/news" class="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300 group">
+          <Clock class="h-10 w-10 text-orange-600 mx-auto mb-3 group-hover:scale-110 transition-transform duration-200" />
+          <h3 class="font-semibold text-gray-900 mb-2">News & Events</h3>
+          <p class="text-sm text-gray-600">Latest updates and upcoming events</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

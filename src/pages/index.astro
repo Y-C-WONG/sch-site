@@ -1,0 +1,496 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import Hero from '../components/Hero.astro'
+import NewsCard from '../components/NewsCard.astro'
+import EventCard from '../components/EventCard.astro'
+import CalendarWidget from '../components/CalendarWidget.astro'
+import { BookOpen, Users, Award, Globe, ChevronRight, Play } from 'lucide-astro'
+
+// Mock data for demonstration - will be replaced with database queries
+const featuredNews = [
+  {
+    id: 1,
+    title: "Science Fair Winners Announced",
+    slug: "science-fair-winners-2024",
+    excerpt: "Our students excelled at this year's science fair with innovative projects that impressed judges and visitors alike.",
+    content: "",
+    category_id: 2,
+    status: "published" as const,
+    is_featured: true,
+    published_at: "2024-03-15T10:00:00Z",
+    created_at: "2024-03-15T10:00:00Z",
+    updated_at: "2024-03-15T10:00:00Z",
+    category: { id: 2, name: "Academic", slug: "academic", type: "both" as const, is_active: true, created_at: "", updated_at: "" }
+  },
+  {
+    id: 2,
+    title: "New Library Opening This Fall",
+    slug: "new-library-opening-fall-2024",
+    excerpt: "State-of-the-art learning facility with modern technology and comfortable study spaces for all students.",
+    content: "",
+    category_id: 1,
+    status: "published" as const,
+    is_featured: false,
+    published_at: "2024-03-10T14:30:00Z",
+    created_at: "2024-03-10T14:30:00Z",
+    updated_at: "2024-03-10T14:30:00Z",
+    category: { id: 1, name: "General", slug: "general", type: "news" as const, is_active: true, created_at: "", updated_at: "" }
+  },
+  {
+    id: 3,
+    title: "Soccer Team Wins Regional Championship",
+    slug: "soccer-team-regional-championship-2024",
+    excerpt: "Congratulations to our varsity soccer team for their outstanding performance in the regional championship.",
+    content: "",
+    category_id: 3,
+    status: "published" as const,
+    is_featured: false,
+    published_at: "2024-03-08T16:00:00Z",
+    created_at: "2024-03-08T16:00:00Z",
+    updated_at: "2024-03-08T16:00:00Z",
+    category: { id: 3, name: "Sports", slug: "sports", type: "both" as const, is_active: true, created_at: "", updated_at: "" }
+  }
+]
+
+const upcomingEvents = [
+  {
+    id: 1,
+    title: "Parent-Teacher Conference",
+    slug: "parent-teacher-conference-march-2024",
+    description: "Meet with your child's teachers to discuss academic progress and development.",
+    content: "",
+    category_id: 2,
+    start_date: "2024-03-25",
+    start_time: "14:00:00",
+    end_time: "18:00:00",
+    location: "Main Campus",
+    is_all_day: false,
+    is_recurring: false,
+    status: "published" as const,
+    is_featured: true,
+    created_at: "2024-03-01T10:00:00Z",
+    updated_at: "2024-03-01T10:00:00Z",
+    category: { id: 2, name: "Academic", slug: "academic", type: "both" as const, is_active: true, created_at: "", updated_at: "", color: "#3B82F6" }
+  },
+  {
+    id: 2,
+    title: "Spring Music Concert",
+    slug: "spring-music-concert-2024",
+    description: "Annual spring concert featuring our talented student musicians and vocalists.",
+    content: "",
+    category_id: 4,
+    start_date: "2024-04-15",
+    start_time: "19:00:00",
+    end_time: "21:00:00",
+    location: "School Auditorium",
+    is_all_day: false,
+    is_recurring: false,
+    status: "published" as const,
+    is_featured: false,
+    created_at: "2024-03-01T10:00:00Z",
+    updated_at: "2024-03-01T10:00:00Z",
+    category: { id: 4, name: "Arts", slug: "arts", type: "both" as const, is_active: true, created_at: "", updated_at: "", color: "#8B5CF6" }
+  }
+]
+---
+
+<Layout title="International School - Excellence in Education" description="Leading international school providing world-class education from Primary through Sixth Form. Nurturing global citizens through innovative learning and character development.">
+  <Header />
+  
+  <!-- Hero Section -->
+  <Hero 
+    title="Excellence in International Education"
+    subtitle="Nurturing Global Citizens"
+    description="Empowering students from Primary through Sixth Form with world-class education, innovative learning approaches, and strong character development in a truly international community."
+    ctaText="Explore Our Programs"
+    ctaLink="/academic-programs"
+    backgroundImage="/images/hero-school-wider.png"
+    showStats={true}
+  />
+
+  <!-- Welcome Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        
+        <!-- Content -->
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">
+            Welcome to Our School Community
+          </h2>
+          <div class="prose prose-lg text-gray-600">
+            <p>
+              At International School, we believe every child has the potential to become a global citizen who makes a positive impact on the world. Our comprehensive educational approach combines academic excellence with character development, preparing students for success in an interconnected world.
+            </p>
+            <p>
+              With over 25 years of educational excellence, we provide a nurturing environment where students from diverse backgrounds come together to learn, grow, and discover their passions. Our dedicated faculty and innovative curriculum ensure that each student receives the support they need to reach their full potential.
+            </p>
+          </div>
+          
+          <div class="mt-8">
+            <a 
+              href="/about" 
+              class="inline-flex items-center px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors duration-300"
+            >
+              Learn About Our Story
+              <ChevronRight class="ml-2 h-5 w-5" />
+            </a>
+          </div>
+        </div>
+
+        <!-- Image & Stats -->
+        <div class="relative">
+          <img 
+            src="/images/welcome-students.png" 
+            alt="Students collaborating in classroom" 
+            class="rounded-xl shadow-lg"
+          />
+          
+          <!-- Floating Stats Card -->
+          <div class="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-xl p-6 hidden sm:block">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary-600 mb-1">98%</div>
+              <div class="text-sm text-gray-600">University Acceptance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Principles -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          Our Core Principles
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Four foundational pillars guide everything we do, ensuring comprehensive development for every student.
+        </p>
+      </div>
+      
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Left side - Core Principles Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
+          
+          <!-- Academic Excellence -->
+          <div class="text-center group">
+            <div class="bg-primary-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-200 transition-colors duration-300">
+              <BookOpen class="h-6 w-6 text-primary-600" />
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Academic Excellence</h3>
+            <p class="text-gray-600 text-sm">
+              Rigorous curriculum combining international standards with innovative teaching methodologies to inspire lifelong learning.
+            </p>
+          </div>
+
+          <!-- Global Citizenship -->
+          <div class="text-center group">
+            <div class="bg-primary-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-200 transition-colors duration-300">
+              <Globe class="h-6 w-6 text-primary-600" />
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Global Citizenship</h3>
+            <p class="text-gray-600 text-sm">
+              Developing cultural awareness, empathy, and social responsibility to prepare students for our interconnected world.
+            </p>
+          </div>
+
+          <!-- Character Development -->
+          <div class="text-center group">
+            <div class="bg-primary-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-200 transition-colors duration-300">
+              <Award class="h-6 w-6 text-primary-600" />
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Character Development</h3>
+            <p class="text-gray-600 text-sm">
+              Building integrity, resilience, and leadership skills through comprehensive personal development programs.
+            </p>
+          </div>
+
+          <!-- Community Engagement -->
+          <div class="text-center group">
+            <div class="bg-primary-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-200 transition-colors duration-300">
+              <Users class="h-6 w-6 text-primary-600" />
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Community Engagement</h3>
+            <p class="text-gray-600 text-sm">
+              Fostering meaningful connections and collaborative relationships within and beyond our school community.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right side - YouTube Video -->
+        <div class="w-full max-w-xl">
+          <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+            <iframe
+              src="https://www.youtube.com/embed/Trp-EYtRlPA?si=0ej4IiBrmf6RUd6D"
+              title="International School Video"
+              class="w-full h-full"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Digital Skills & Character Development Cards -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-8">
+        
+        <!-- Digital Skills Card -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <div class="aspect-w-16 aspect-h-9">
+            <img 
+              src="/images/digital-skills.png" 
+              alt="Students using technology" 
+              class="w-full h-64 object-cover"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Digital Skills & Innovation</h3>
+            <p class="text-gray-600 mb-6">
+              Preparing students for the digital future with comprehensive technology integration, coding programs, robotics, and digital literacy skills that enhance learning across all subjects.
+            </p>
+            <ul class="space-y-2 text-gray-600 mb-6">
+              <li class="flex items-center">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+                STEM and Robotics Programs
+              </li>
+              <li class="flex items-center">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+                Digital Design & Media
+              </li>
+              <li class="flex items-center">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+                Technology-Enhanced Learning
+              </li>
+            </ul>
+            <a 
+              href="/academic-programs#digital-skills" 
+              class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+            >
+              Explore Digital Programs
+              <ChevronRight class="ml-1 h-4 w-4" />
+            </a>
+          </div>
+        </div>
+
+        <!-- Character Development Card -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <div class="aspect-w-16 aspect-h-9">
+            <img 
+              src="/images/character-development.png" 
+              alt="Students in leadership activities" 
+              class="w-full h-64 object-cover"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Character & Leadership</h3>
+            <p class="text-gray-600 mb-6">
+              Building strong character through service learning, leadership opportunities, and values-based education that develops responsible, compassionate global citizens.
+            </p>
+            <ul class="space-y-2 text-gray-600 mb-6">
+              <li class="flex items-center">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+                Student Leadership Council
+              </li>
+              <li class="flex items-center">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+                Community Service Projects
+              </li>
+              <li class="flex items-center">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+                Character Education Program
+              </li>
+            </ul>
+            <a 
+              href="/about#character-development" 
+              class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+            >
+              Learn About Our Values
+              <ChevronRight class="ml-1 h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Educational Stages -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          Educational Journey
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Comprehensive education from Early Years through Sixth Form, designed to nurture growth at every stage of development.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Primary School -->
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+          <div class="text-4xl font-bold text-blue-600 mb-2">K-5</div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Primary School</h3>
+          <p class="text-gray-600 mb-4">
+            Foundation years focused on curiosity, creativity, and fundamental skills development.
+          </p>
+          <a href="/academic-programs#primary" class="text-blue-600 hover:text-blue-700 font-medium text-sm">
+            Learn More →
+          </a>
+        </div>
+
+        <!-- Middle School -->
+        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+          <div class="text-4xl font-bold text-green-600 mb-2">6-8</div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Middle School</h3>
+          <p class="text-gray-600 mb-4">
+            Exploration and discovery phase with increased independence and academic rigor.
+          </p>
+          <a href="/academic-programs#middle" class="text-green-600 hover:text-green-700 font-medium text-sm">
+            Learn More →
+          </a>
+        </div>
+
+        <!-- Senior School -->
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+          <div class="text-4xl font-bold text-purple-600 mb-2">9-11</div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Senior School</h3>
+          <p class="text-gray-600 mb-4">
+            Advanced academic preparation with IGCSE qualifications and university readiness.
+          </p>
+          <a href="/academic-programs#senior" class="text-purple-600 hover:text-purple-700 font-medium text-sm">
+            Learn More →
+          </a>
+        </div>
+
+        <!-- Sixth Form -->
+        <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+          <div class="text-4xl font-bold text-orange-600 mb-2">12-13</div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Sixth Form</h3>
+          <p class="text-gray-600 mb-4">
+            A-Level specialization and university preparation with career guidance.
+          </p>
+          <a href="/academic-programs#sixth-form" class="text-orange-600 hover:text-orange-700 font-medium text-sm">
+            Learn More →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accreditation Section -->
+  <section class="py-16 bg-primary-500">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold text-white mb-8">
+        International Accreditation & Partnerships
+      </h2>
+      <p class="text-xl text-primary-100 mb-12 max-w-3xl mx-auto">
+        Our commitment to excellence is recognized by leading international educational organizations.
+      </p>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+          <img src="/images/ib-logo.png" alt="International Baccalaureate" class="h-20 mx-auto mb-2 opacity-90" />
+          <div class="text-white text-sm font-medium">IB World School</div>
+        </div>
+        
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+          <img src="/images/cambridge-logo.png" alt="Cambridge Assessment" class="h-20 mx-auto mb-2 opacity-90" />
+          <div class="text-white text-sm font-medium">Cambridge Certified</div>
+        </div>
+        
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+          <img src="/images/wasc-logo.png" alt="WASC Accreditation" class="h-20 mx-auto mb-2 opacity-90" />
+          <div class="text-white text-sm font-medium">WASC Accredited</div>
+        </div>
+        
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+          <img src="/images/council-logo.png" alt="Council of International Schools" class="h-20 mx-auto mb-2 opacity-90" />
+          <div class="text-white text-sm font-medium">CIS Member</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News & Events Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-3 gap-12">
+        
+        <!-- News Section -->
+        <div class="lg:col-span-2">
+          <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">Latest News</h2>
+            <a 
+              href="/news" 
+              class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+            >
+              View All News
+              <ChevronRight class="ml-1 h-4 w-4" />
+            </a>
+          </div>
+          
+          <div class="grid gap-8">
+            {featuredNews.map((article, index) => (
+              <NewsCard article={article} featured={index === 0} />
+            ))}
+          </div>
+        </div>
+
+        <!-- Events & Calendar Sidebar -->
+        <div class="space-y-8">
+          
+          <!-- Calendar Widget -->
+          <CalendarWidget events={upcomingEvents} />
+          
+          <!-- Upcoming Events -->
+          <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-primary-500 text-white p-4">
+              <h3 class="text-lg font-semibold">Upcoming Events</h3>
+            </div>
+            <div class="p-4 space-y-4">
+              {upcomingEvents.slice(0, 3).map(event => (
+                <EventCard event={event} compact={true} />
+              ))}
+              
+              <div class="pt-4 border-t border-gray-200">
+                <a 
+                  href="/news#events" 
+                  class="inline-flex items-center justify-center w-full px-4 py-2 bg-primary-500 text-white font-medium rounded-lg hover:bg-primary-600 transition-colors duration-200"
+                >
+                  View All Events
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Call to Action -->
+          <div class="bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl p-6 text-white text-center">
+            <h3 class="text-xl font-bold mb-3">Ready to Join Our Community?</h3>
+            <p class="text-primary-100 mb-4">
+              Discover how your child can thrive in our international learning environment.
+            </p>
+            <a 
+              href="/academic-year" 
+              class="inline-flex items-center justify-center w-full px-4 py-3 bg-white text-primary-600 font-semibold rounded-lg hover:bg-primary-50 transition-colors duration-200"
+            >
+              Start Application Process
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,513 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import EventCard from '../../components/EventCard.astro'
+import { supabase } from '../../lib/supabase'
+import type { Event } from '../../lib/supabase'
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Share2, Tag, Phone, Mail } from 'lucide-astro'
+
+export async function getStaticPaths() {
+  try {
+    const { data: events, error } = await supabase
+      .from('events')
+      .select('slug, title')
+      .eq('status', 'published')
+    
+    if (error) {
+      console.error('Error fetching events for static paths:', error)
+      return []
+    }
+
+    return (events || []).map(event => ({
+      params: { slug: event.slug },
+      props: { slug: event.slug }
+    }))
+  } catch (error) {
+    console.error('Error in getStaticPaths:', error)
+    return []
+  }
+}
+
+const { slug } = Astro.params
+
+// Fetch the specific event
+let event: Event | null = null
+let relatedEvents: Event[] = []
+
+try {
+  const { data: eventData, error: eventError } = await supabase
+    .from('events')
+    .select(`
+      *,
+      category:categories(*),
+      tags:event_tags(tag:tags(*))
+    `)
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .single()
+  
+  if (eventError) {
+    console.error('Error fetching event:', eventError)
+  } else if (eventData) {
+    event = {
+      ...eventData,
+      tags: eventData.tags?.map(t => t.tag).filter(Boolean) || []
+    }
+  }
+} catch (error) {
+  console.error('Error fetching event:', error)
+}
+
+// Fetch related events if we have an event
+if (event) {
+  try {
+    const { data: relatedData, error: relatedError } = await supabase
+      .from('events')
+      .select(`
+        *,
+        category:categories(*),
+        tags:event_tags(tag:tags(*))
+      `)
+      .eq('status', 'published')
+      .eq('category_id', event.category_id)
+      .neq('id', event.id)
+      .limit(3)
+      .order('start_date', { ascending: true })
+    
+    if (relatedError) {
+      console.error('Error fetching related events:', relatedError)
+    } else {
+      relatedEvents = (relatedData || []).map(relatedEvent => ({
+        ...relatedEvent,
+        tags: relatedEvent.tags?.map(t => t.tag).filter(Boolean) || []
+      }))
+    }
+  } catch (error) {
+    console.error('Error fetching related events:', error)
+  }
+}
+
+// If event not found, return 404
+if (!event) {
+  return Astro.redirect('/404')
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+const formatTime = (timeString: string) => {
+  return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  })
+}
+
+const isUpcoming = new Date(event.start_date) >= new Date()
+const isPast = new Date(event.start_date) < new Date()
+---
+
+<Layout 
+  title={`${event.title} - International School`}
+  description={event.description || event.title}
+  ogTitle={event.og_title || event.title}
+  ogDescription={event.og_description || event.description || event.title}
+  ogImage={event.og_image_id ? `/images/events/${event.slug}-og.jpg` : `/images/events/${event.slug}.jpg`}
+>
+  <Header />
+  
+  <!-- Event Header -->
+  <section class="py-8 bg-gray-50">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      
+      <!-- Breadcrumb -->
+      <nav class="flex items-center space-x-2 text-sm text-gray-600 mb-6">
+        <a href="/" class="hover:text-primary-600">Home</a>
+        <span>/</span>
+        <a href="/events" class="hover:text-primary-600">Events</a>
+        <span>/</span>
+        <span class="text-gray-900">{event.title}</span>
+      </nav>
+
+      <!-- Back Button -->
+      <div class="mb-6">
+        <a 
+          href="/events" 
+          class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+        >
+          <ArrowLeft class="h-4 w-4 mr-2" />
+          Back to Events
+        </a>
+      </div>
+
+      <!-- Event Status Badge -->
+      <div class="flex items-center gap-4 mb-6">
+        {isUpcoming && (
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+            Upcoming Event
+          </span>
+        )}
+        {isPast && (
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+            Past Event
+          </span>
+        )}
+        {event.is_featured && (
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+            Featured
+          </span>
+        )}
+        {event.category && (
+          <span 
+            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white"
+            style={`background-color: ${event.category.color || '#10B981'}`}
+          >
+            {event.category.name}
+          </span>
+        )}
+      </div>
+
+      <!-- Event Title -->
+      <h1 class="text-4xl font-bold text-gray-900 mb-4 leading-tight">
+        {event.title}
+      </h1>
+
+      <!-- Event Description -->
+      {event.description && (
+        <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+          {event.description}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- Featured Image -->
+  <section class="mb-8">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-xl shadow-lg">
+        <img 
+          src={`/images/events/${event.slug}.jpg`}
+          alt={event.title}
+          class="w-full h-96 object-cover"
+          loading="eager"
+        />
+        
+        <!-- Date Overlay -->
+        <div class="absolute top-6 left-6 bg-white rounded-lg p-4 text-center shadow-lg">
+          <div class="text-sm font-semibold text-primary-600">
+            {new Date(event.start_date).toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}
+          </div>
+          <div class="text-3xl font-bold text-gray-900">
+            {new Date(event.start_date).getDate()}
+          </div>
+          <div class="text-sm text-gray-600">
+            {new Date(event.start_date).getFullYear()}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Details -->
+  <section class="py-8">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-3 gap-12">
+        
+        <!-- Main Content -->
+        <div class="lg:col-span-2">
+          
+          <!-- Event Information -->
+          <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Event Details</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+              
+              <!-- Date & Time -->
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <Calendar class="h-6 w-6 text-primary-500 mr-4 mt-1 flex-shrink-0" />
+                  <div>
+                    <h4 class="font-semibold text-gray-900 mb-1">Date</h4>
+                    <p class="text-gray-600">
+                      {formatDate(event.start_date)}
+                      {event.end_date && event.end_date !== event.start_date && (
+                        <span> - {formatDate(event.end_date)}</span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+
+                {!event.is_all_day && (event.start_time || event.end_time) && (
+                  <div class="flex items-start">
+                    <Clock class="h-6 w-6 text-primary-500 mr-4 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 class="font-semibold text-gray-900 mb-1">Time</h4>
+                      <p class="text-gray-600">
+                        {event.start_time && formatTime(event.start_time)}
+                        {event.end_time && event.start_time && ' - '}
+                        {event.end_time && formatTime(event.end_time)}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {event.is_all_day && (
+                  <div class="flex items-start">
+                    <Clock class="h-6 w-6 text-primary-500 mr-4 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 class="font-semibold text-gray-900 mb-1">Duration</h4>
+                      <p class="text-gray-600">All Day Event</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <!-- Location & Capacity -->
+              <div class="space-y-4">
+                {event.location && (
+                  <div class="flex items-start">
+                    <MapPin class="h-6 w-6 text-primary-500 mr-4 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 class="font-semibold text-gray-900 mb-1">Location</h4>
+                      <p class="text-gray-600">{event.location}</p>
+                    </div>
+                  </div>
+                )}
+
+                {event.max_attendees && (
+                  <div class="flex items-start">
+                    <Users class="h-6 w-6 text-primary-500 mr-4 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 class="font-semibold text-gray-900 mb-1">Capacity</h4>
+                      <p class="text-gray-600">Maximum {event.max_attendees} attendees</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <!-- Event Content -->
+          {event.content && (
+            <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">About This Event</h2>
+              <div class="prose prose-lg max-w-none">
+                <div set:html={event.content} />
+              </div>
+            </div>
+          )}
+
+          <!-- Tags -->
+          {event.tags && event.tags.length > 0 && (
+            <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                <Tag class="h-5 w-5 mr-2" />
+                Event Tags
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {event.tags.map(tag => (
+                  <a 
+                    href={`/events/tag/${tag.slug}`}
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors duration-200"
+                  >
+                    {tag.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- Share Buttons -->
+          <div class="bg-white rounded-xl shadow-md p-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <Share2 class="h-5 w-5 mr-2" />
+              Share this event
+            </h3>
+            <div class="flex space-x-4">
+              <a 
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(event.title)}&url=${encodeURIComponent(Astro.url.href)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+              >
+                Twitter
+              </a>
+              <a 
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.href)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+              >
+                Facebook
+              </a>
+              <a 
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors duration-200"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-8 space-y-6">
+            
+            <!-- Quick Info -->
+            <div class="bg-primary-50 rounded-xl p-6">
+              <h3 class="font-semibold text-gray-900 mb-4">Quick Information</h3>
+              <div class="space-y-3 text-sm">
+                <div>
+                  <span class="text-gray-600">Event Date:</span>
+                  <div class="font-medium text-gray-900">
+                    {formatDate(event.start_date)}
+                  </div>
+                </div>
+                
+                {!event.is_all_day && event.start_time && (
+                  <div>
+                    <span class="text-gray-600">Start Time:</span>
+                    <div class="font-medium text-gray-900">
+                      {formatTime(event.start_time)}
+                    </div>
+                  </div>
+                )}
+                
+                {event.category && (
+                  <div>
+                    <span class="text-gray-600">Category:</span>
+                    <div class="font-medium text-gray-900">
+                      {event.category.name}
+                    </div>
+                  </div>
+                )}
+                
+                {event.location && (
+                  <div>
+                    <span class="text-gray-600">Location:</span>
+                    <div class="font-medium text-gray-900">{event.location}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="bg-white border border-gray-200 rounded-xl p-6">
+              <h3 class="font-semibold text-gray-900 mb-4">Need More Information?</h3>
+              <div class="space-y-3">
+                <div class="flex items-center text-sm">
+                  <Phone class="h-4 w-4 text-primary-500 mr-2" />
+                  <span>+1-555-0123</span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <Mail class="h-4 w-4 text-primary-500 mr-2" />
+                  <span>events@school.edu</span>
+                </div>
+              </div>
+              <div class="mt-4">
+                <a 
+                  href="/contact" 
+                  class="inline-flex items-center justify-center w-full px-4 py-2 bg-primary-500 text-white font-medium rounded-lg hover:bg-primary-600 transition-colors duration-200"
+                >
+                  Contact Us
+                </a>
+              </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="bg-white border border-gray-200 rounded-xl p-6">
+              <h3 class="font-semibold text-gray-900 mb-4">Quick Links</h3>
+              <div class="space-y-2">
+                <a href="/events" class="block text-sm text-gray-600 hover:text-primary-600 transition-colors duration-200">
+                  ← All Events
+                </a>
+                <a href="/academic-year" class="block text-sm text-gray-600 hover:text-primary-600 transition-colors duration-200">
+                  Academic Calendar
+                </a>
+                <a href="/news" class="block text-sm text-gray-600 hover:text-primary-600 transition-colors duration-200">
+                  Latest News
+                </a>
+                <a href="/contact" class="block text-sm text-gray-600 hover:text-primary-600 transition-colors duration-200">
+                  Contact School
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Events -->
+  {relatedEvents.length > 0 && (
+    <section class="py-16 bg-gray-50">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Related Events</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {relatedEvents.map(relatedEvent => (
+            <EventCard event={relatedEvent} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <Footer />
+</Layout>
+
+<style>
+  .prose {
+    color: #374151;
+    line-height: 1.75;
+  }
+
+  .prose p {
+    margin-bottom: 1.25em;
+  }
+
+  .prose h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    color: #111827;
+  }
+
+  .prose h3 {
+    font-size: 1.25em;
+    font-weight: 600;
+    margin-top: 1.6em;
+    margin-bottom: 0.6em;
+    color: #111827;
+  }
+
+  .prose ul, .prose ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-left: 1.625em;
+  }
+
+  .prose li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  .prose blockquote {
+    font-style: italic;
+    border-left: 4px solid #10b981;
+    padding-left: 1em;
+    margin: 1.6em 0;
+    color: #6b7280;
+  }
+</style>

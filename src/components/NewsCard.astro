@@ -1,0 +1,119 @@
+---
+import { Calendar, User, ChevronRight } from 'lucide-astro'
+import type { NewsArticle } from '../lib/supabase'
+
+interface Props {
+  article: NewsArticle
+  featured?: boolean
+}
+
+const { article, featured = false } = Astro.props
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+---
+
+<article class={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 ${featured ? 'lg:col-span-2' : ''}`}>
+  <!-- Featured Image -->
+  <div class="relative overflow-hidden">
+    <img 
+      src={`/images/news/${article.slug}.png`} 
+      alt={article.title}
+      class={`w-full object-cover transition-transform duration-300 hover:scale-105 ${featured ? 'h-64 sm:h-80' : 'h-48'}`}
+      loading="lazy"
+    />
+    
+    <!-- Category Badge -->
+    {article.category && (
+      <div class="absolute top-4 left-4">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-500 text-white">
+          {article.category.name}
+        </span>
+      </div>
+    )}
+    
+    <!-- Featured Badge -->
+    {article.is_featured && (
+      <div class="absolute top-4 right-4">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-500 text-white">
+          Featured
+        </span>
+      </div>
+    )}
+  </div>
+
+  <!-- Content -->
+  <div class="p-6">
+    <!-- Meta Information -->
+    <div class="flex items-center text-sm text-gray-500 mb-3">
+      <Calendar class="h-4 w-4 mr-2" />
+      <time datetime={article.published_at}>
+        {formatDate(article.published_at || article.created_at)}
+      </time>
+      
+      {article.category && (
+        <>
+          <span class="mx-2">•</span>
+          <span>{article.category.name}</span>
+        </>
+      )}
+    </div>
+
+    <!-- Title -->
+    <h3 class={`font-bold text-gray-900 mb-3 line-clamp-2 hover:text-primary-600 transition-colors duration-200 ${featured ? 'text-2xl' : 'text-xl'}`}>
+      <a href={`/news/${article.slug}`}>
+        {article.title}
+      </a>
+    </h3>
+
+    <!-- Excerpt -->
+    {article.excerpt && (
+      <p class="text-gray-600 mb-4 line-clamp-3">
+        {article.excerpt}
+      </p>
+    )}
+
+    <!-- Tags -->
+    {article.tags && article.tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {article.tags.slice(0, 3).map(tag => (
+          <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700">
+            {tag.name}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <!-- Read More Link -->
+    <div class="flex items-center justify-between">
+      <a 
+        href={`/news/${article.slug}`}
+        class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm transition-colors duration-200"
+      >
+        Read More
+        <ChevronRight class="ml-1 h-4 w-4" />
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

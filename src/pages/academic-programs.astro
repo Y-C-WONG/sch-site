@@ -1,0 +1,513 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import Hero from '../components/Hero.astro'
+import { BookOpen, Users, Globe, Award, Languages, Microscope, Palette, Code, Music, Trophy } from 'lucide-astro'
+---
+
+<Layout 
+  title="Academic Programs - International School" 
+  description="Explore our comprehensive academic programs from Primary through Sixth Form, featuring IB and Cambridge curricula, innovative teaching methods, and global perspectives."
+>
+  <Header />
+  
+  <!-- Hero Section -->
+  <Hero 
+    title="Academic Programs"
+    subtitle="Excellence in Learning"
+    description="Comprehensive international education from Early Years through Sixth Form, combining rigorous academic standards with innovative teaching approaches to prepare students for global success."
+    ctaText="Apply Now"
+    ctaLink="/academic-year"
+    backgroundImage="/images/hero-school.png"
+  />
+
+  <!-- Curriculum Overview -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Curriculum</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          A blend of international curricula designed to develop knowledgeable, caring, and globally-minded learners.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        
+        <!-- International Baccalaureate -->
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 text-center">
+          <Globe class="h-12 w-12 text-blue-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">International Baccalaureate</h3>
+          <p class="text-gray-600 mb-4">
+            Comprehensive IB programmes that develop intellectual, personal, emotional and social skills needed to live and work in a rapidly globalizing world.
+          </p>
+          <div class="text-sm text-blue-600 font-medium">
+            Primary Years Programme (PYP) • Middle Years Programme (MYP) • Diploma Programme (DP)
+          </div>
+        </div>
+
+        <!-- Cambridge International -->
+        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-8 text-center">
+          <Award class="h-12 w-12 text-green-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Cambridge International</h3>
+          <p class="text-gray-600 mb-4">
+            Internationally recognized qualifications that prepare students for success at university and in their careers worldwide.
+          </p>
+          <div class="text-sm text-green-600 font-medium">
+            Cambridge Primary • Cambridge Secondary • IGCSE • A-Levels
+          </div>
+        </div>
+
+        <!-- Language Programs -->
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-8 text-center">
+          <Languages class="h-12 w-12 text-purple-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Multilingual Education</h3>
+          <p class="text-gray-600 mb-4">
+            English as the primary language of instruction, with strong support for mother tongue languages and additional language acquisition.
+          </p>
+          <div class="text-sm text-purple-600 font-medium">
+            English • Spanish • French • Mandarin • Mother Tongue Support
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Educational Stages -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Educational Journey</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Carefully structured progression through developmental stages, each designed to meet students' evolving needs and interests.
+        </p>
+      </div>
+
+      <!-- Primary School -->
+      <div id="primary" class="mb-16">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="flex items-center mb-4">
+              <div class="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold mr-4">
+                K-5
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900">Primary School</h3>
+            </div>
+            
+            <p class="text-lg text-gray-600 mb-6">
+              Foundation years focused on developing curiosity, creativity, and fundamental skills through inquiry-based learning and play-based approaches.
+            </p>
+
+            <div class="space-y-4">
+              <h4 class="font-semibold text-gray-900">Key Features:</h4>
+              <ul class="space-y-2 text-gray-600">
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                  IB Primary Years Programme (PYP) framework
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                  Transdisciplinary units of inquiry
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                  Mother tongue language support
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                  Specialist subjects: Art, Music, PE, Technology
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                  Small class sizes (maximum 20 students)
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="relative">
+            <img 
+              src="/images/primary-school.png" 
+              alt="Primary school students learning" 
+              class="rounded-xl shadow-lg"
+            />
+            <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-xl p-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-blue-600">1:10</div>
+                <div class="text-sm text-gray-600">Teacher Ratio</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle School -->
+      <div id="middle" class="mb-16">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="order-2 lg:order-1 relative">
+            <img 
+              src="/images/middle-school.png" 
+              alt="Middle school students in science lab" 
+              class="rounded-xl shadow-lg"
+            />
+            <div class="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl p-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-600">8</div>
+                <div class="text-sm text-gray-600">Subject Areas</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-1 lg:order-2">
+            <div class="flex items-center mb-4">
+              <div class="bg-green-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold mr-4">
+                6-8
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900">Middle School</h3>
+            </div>
+            
+            <p class="text-lg text-gray-600 mb-6">
+              Exploration and discovery phase with increased independence, academic rigor, and opportunities for personal growth and leadership development.
+            </p>
+
+            <div class="space-y-4">
+              <h4 class="font-semibold text-gray-900">Key Features:</h4>
+              <ul class="space-y-2 text-gray-600">
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                  IB Middle Years Programme (MYP) framework
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                  Subject-specific classes with interdisciplinary connections
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                  Community and Service learning projects
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                  Extended learning opportunities and clubs
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                  Personal Project in Grade 8
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Senior School -->
+      <div id="senior" class="mb-16">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="flex items-center mb-4">
+              <div class="bg-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold mr-4">
+                9-11
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900">Senior School</h3>
+            </div>
+            
+            <p class="text-lg text-gray-600 mb-6">
+              Advanced academic preparation with IGCSE qualifications, university readiness programs, and specialized subject choices to align with student interests and career goals.
+            </p>
+
+            <div class="space-y-4">
+              <h4 class="font-semibold text-gray-900">Key Features:</h4>
+              <ul class="space-y-2 text-gray-600">
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  Cambridge IGCSE curriculum (Grades 9-10)
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  Pre-IB programme preparation (Grade 11)
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  University and career counseling
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  Leadership and service opportunities
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  International exchange programs
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="relative">
+            <img 
+              src="/images/senior-school.png" 
+              alt="Senior school students in discussion" 
+              class="rounded-xl shadow-lg"
+            />
+            <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-xl p-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-purple-600">15+</div>
+                <div class="text-sm text-gray-600">IGCSE Subjects</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sixth Form -->
+      <div id="sixth-form">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="order-2 lg:order-1 relative">
+            <img 
+              src="/images/sixth-form.png" 
+              alt="Sixth form students studying" 
+              class="rounded-xl shadow-lg"
+            />
+            <div class="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl p-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-orange-600">98%</div>
+                <div class="text-sm text-gray-600">University Rate</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-1 lg:order-2">
+            <div class="flex items-center mb-4">
+              <div class="bg-orange-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold mr-4">
+                12-13
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900">Sixth Form</h3>
+            </div>
+            
+            <p class="text-lg text-gray-600 mb-6">
+              IB Diploma Programme and A-Level specialization with comprehensive university preparation, career guidance, and independent research opportunities.
+            </p>
+
+            <div class="space-y-4">
+              <h4 class="font-semibold text-gray-900">Key Features:</h4>
+              <ul class="space-y-2 text-gray-600">
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                  IB Diploma Programme (full or certificate)
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                  Cambridge A-Level options
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                  Extended Essay and independent research
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                  University application support
+                </li>
+                <li class="flex items-center">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                  Creativity, Activity, Service (CAS) programme
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Special Programs -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Specialized Programs</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Enhanced learning opportunities that go beyond the core curriculum to develop specific talents and interests.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- STEM Program -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+          <Microscope class="h-12 w-12 text-blue-600 mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">STEM Excellence</h3>
+          <p class="text-gray-600 mb-4">
+            Advanced Science, Technology, Engineering, and Mathematics programs with hands-on laboratories and research opportunities.
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Robotics and Engineering Club</li>
+            <li>• Science Fair and Competitions</li>
+            <li>• University Research Partnerships</li>
+            <li>• AP and IB Higher Level Sciences</li>
+          </ul>
+        </div>
+
+        <!-- Arts Program -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+          <Palette class="h-12 w-12 text-pink-600 mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Creative Arts</h3>
+          <p class="text-gray-600 mb-4">
+            Comprehensive visual and performing arts education fostering creativity, expression, and cultural appreciation.
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Visual Arts and Design Studios</li>
+            <li>• Music and Drama Programs</li>
+            <li>• Annual Arts Festivals</li>
+            <li>• Gallery Exhibitions</li>
+          </ul>
+        </div>
+
+        <!-- Digital Skills -->
+        <div id="digital-skills" class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+          <Code class="h-12 w-12 text-green-600 mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Digital Innovation</h3>
+          <p class="text-gray-600 mb-4">
+            Future-ready digital skills including programming, web development, digital design, and computational thinking.
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Computer Science and Programming</li>
+            <li>• Digital Media and Design</li>
+            <li>• App Development Projects</li>
+            <li>• Technology Integration</li>
+          </ul>
+        </div>
+
+        <!-- Music Program -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+          <Music class="h-12 w-12 text-purple-600 mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Music Excellence</h3>
+          <p class="text-gray-600 mb-4">
+            Comprehensive music education from beginner to advanced levels, including individual instruction and ensemble participation.
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Orchestra and Band Programs</li>
+            <li>• Individual Music Lessons</li>
+            <li>• Annual Concerts and Recitals</li>
+            <li>• Music Technology and Production</li>
+          </ul>
+        </div>
+
+        <!-- Sports Program -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+          <Trophy class="h-12 w-12 text-orange-600 mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Athletic Excellence</h3>
+          <p class="text-gray-600 mb-4">
+            Competitive and recreational sports programs promoting physical fitness, teamwork, and sportsmanship.
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Inter-school Competitions</li>
+            <li>• Swimming and Aquatics</li>
+            <li>• Soccer, Basketball, Tennis</li>
+            <li>• Fitness and Wellness Programs</li>
+          </ul>
+        </div>
+
+        <!-- Global Programs -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+          <Globe class="h-12 w-12 text-indigo-600 mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Global Citizenship</h3>
+          <p class="text-gray-600 mb-4">
+            International exchange programs, Model United Nations, and global awareness initiatives fostering cultural understanding.
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• Student Exchange Programs</li>
+            <li>• Model United Nations</li>
+            <li>• Cultural Immersion Trips</li>
+            <li>• Global Issues Forum</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaching Philosophy -->
+  <section class="py-16 bg-primary-500 text-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">Our Teaching Philosophy</h2>
+        <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+          Student-centered learning approaches that foster critical thinking, creativity, and global awareness.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <div class="text-center">
+          <Users class="h-12 w-12 text-primary-200 mx-auto mb-4" />
+          <h3 class="text-xl font-semibold mb-3">Inquiry-Based Learning</h3>
+          <p class="text-primary-100">
+            Encouraging students to ask questions, investigate, and construct their own understanding through guided discovery.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <BookOpen class="h-12 w-12 text-primary-200 mx-auto mb-4" />
+          <h3 class="text-xl font-semibold mb-3">Differentiated Instruction</h3>
+          <p class="text-primary-100">
+            Tailoring teaching methods and materials to meet diverse learning styles, abilities, and interests of all students.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <Globe class="h-12 w-12 text-primary-200 mx-auto mb-4" />
+          <h3 class="text-xl font-semibold mb-3">Global Perspectives</h3>
+          <p class="text-primary-100">
+            Integrating international mindedness across all subjects to develop culturally aware and responsible global citizens.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Academic Achievement -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Academic Achievement</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Our students consistently achieve excellent results and gain admission to top universities worldwide.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <div class="text-center bg-white rounded-xl p-6 shadow-md">
+          <div class="text-3xl font-bold text-primary-600 mb-2">98%</div>
+          <div class="text-gray-600">University Acceptance Rate</div>
+        </div>
+
+        <div class="text-center bg-white rounded-xl p-6 shadow-md">
+          <div class="text-3xl font-bold text-primary-600 mb-2">36</div>
+          <div class="text-gray-600">Average IB Diploma Score</div>
+        </div>
+
+        <div class="text-center bg-white rounded-xl p-6 shadow-md">
+          <div class="text-3xl font-bold text-primary-600 mb-2">25+</div>
+          <div class="text-gray-600">Countries for University</div>
+        </div>
+
+        <div class="text-center bg-white rounded-xl p-6 shadow-md">
+          <div class="text-3xl font-bold text-primary-600 mb-2">85%</div>
+          <div class="text-gray-600">A*-B IGCSE Grades</div>
+        </div>
+      </div>
+
+      <!-- University Destinations -->
+      <div class="mt-12">
+        <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Recent University Destinations</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 items-center justify-items-center opacity-70">
+          <img src="/images/harvard-university.png" alt="Harvard University" class="h-18" />
+          <img src="/images/oxford-university.png" alt="Oxford University" class="h-18" />
+          <img src="/images/mit.png" alt="MIT" class="h-18" />
+          <img src="/images/cambridge-university.jpg" alt="Cambridge University" class="h-18" />
+          <img src="/images/stanford-university.png" alt="Stanford University" class="h-18" />
+          <img src="/images/imperial-college-london.png" alt="Imperial College London" class="h-18" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,159 @@
+---
+import Layout from '../../../layouts/Layout.astro'
+import Header from '../../../components/Header.astro'
+import Footer from '../../../components/Footer.astro'
+import NewsCard from '../../../components/NewsCard.astro'
+import { supabase } from '../../../lib/supabase'
+import type { NewsArticle } from '../../../lib/supabase'
+import { Calendar, ArrowLeft } from 'lucide-astro'
+
+export async function getStaticPaths() {
+  // Fetch all published_at dates from news table
+  const { data: newsDates, error } = await supabase
+    .from('news')
+    .select('published_at')
+    .eq('status', 'published')
+
+  if (error) {
+    console.error('Error fetching news dates for static paths:', error)
+    return []
+  }
+
+  const paths = new Set<string>() // Use a Set to store unique 'YYYY/MM' strings
+
+  newsDates.forEach(item => {
+    if (item.published_at) {
+      const date = new Date(item.published_at)
+      const year = date.getFullYear().toString()
+      const month = (date.getMonth() + 1).toString().padStart(2, '0') // Month is 0-indexed
+      paths.add(`${year}/${month}`)
+    }
+  })
+
+  return Array.from(paths).map(path => {
+    const [year, month] = path.split('/')
+    return {
+      params: { year, month }
+    }
+  })
+}
+
+const { year, month } = Astro.params
+
+// Fetch news articles for the specific year and month
+let articles: NewsArticle[] = []
+let monthName = ''
+
+try {
+  // Construct start and end dates for the month
+  const startDate = `${year}-${month}-01T00:00:00Z`
+  // Calculate the first day of the *next* month to use for the 'less than' filter
+  const nextMonthDate = new Date(parseInt(year), parseInt(month), 1) // Month is 0-indexed for Date constructor, so parseInt(month) is correct for 1-indexed month string
+
+  const { data: articlesData, error: articlesError } = await supabase
+    .from('news')
+    .select(`
+      *,
+      category:categories(*),
+      tags:news_tags(tag:tags(*))
+    `)
+    .eq('status', 'published')
+    .gte('published_at', startDate)
+    .lt('published_at', nextMonthDate.toISOString()) // Use next month's start date for 'less than'
+    .order('published_at', { ascending: false })
+  
+  if (articlesError) {
+    console.error('Error fetching articles for month:', articlesError)
+  } else {
+    articles = (articlesData || []).map(article => ({
+      ...article,
+      tags: article.tags?.map(t => t.tag).filter(Boolean) || []
+    }))
+  }
+
+  // Get month name for display
+  monthName = new Date(parseInt(year), parseInt(month) - 1, 1).toLocaleDateString('en-US', { month: 'long' })
+
+} catch (error) {
+  console.error('Error fetching articles for month:', error)
+}
+
+const pageTitle = `${monthName} ${year} News - International School`
+const pageDescription = `Browse news articles published in ${monthName} ${year} from International School.`
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+>
+  <Header />
+
+  <!-- Page Header -->
+  <section class="py-16 bg-primary-500 text-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center space-x-2 text-sm text-primary-100 mb-6">
+        <a href="/" class="hover:text-white">Home</a>
+        <span>/</span>
+        <a href="/news" class="hover:text-white">News</a>
+        <span>/</span>
+        <a href="/news/archive" class="hover:text-white">Archive</a>
+        <span>/</span>
+        <span class="text-white">{monthName} {year}</span>
+      </nav>
+
+      <div class="text-center">
+        <div class="flex items-center justify-center mb-4">
+          <Calendar class="h-12 w-12 mr-4" />
+          <h1 class="text-4xl font-bold">{monthName} {year} News</h1>
+        </div>
+        <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+          All news articles published in {monthName} {year}.
+        </p>
+        <div class="text-primary-100 mt-4">
+          {articles.length} {articles.length === 1 ? 'article' : 'articles'} found
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Articles -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <!-- Back Button -->
+      <div class="mb-8">
+        <a
+          href="/news/archive"
+          class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+        >
+          <ArrowLeft class="h-4 w-4 mr-2" />
+          Back to News Archive
+        </a>
+      </div>
+
+      {articles.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {articles.map(article => (
+            <NewsCard article={article} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <Calendar class="h-16 w-16 text-gray-300 mx-auto mb-4" />
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles found</h3>
+          <p class="text-gray-600 mb-6">
+            There are no published articles for {monthName} {year}.
+          </p>
+          <a
+            href="/news/archive"
+            class="inline-flex items-center px-6 py-3 bg-primary-500 text-white font-medium rounded-lg hover:bg-primary-600 transition-colors duration-200"
+          >
+            Browse News Archive
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

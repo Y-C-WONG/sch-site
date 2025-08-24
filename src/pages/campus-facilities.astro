@@ -1,0 +1,553 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import Hero from '../components/Hero.astro'
+import { Building, Microscope, BookOpen, Users, Palette, Music, Trophy, Wifi, Shield, Car } from 'lucide-astro'
+---
+
+<Layout 
+  title="Campus & Facilities - International School" 
+  description="Explore our modern campus facilities including state-of-the-art classrooms, science labs, arts studios, sports facilities, and learning spaces designed for 21st-century education."
+>
+  <Header />
+  
+  <!-- Hero Section -->
+  <Hero 
+    title="Campus & Facilities"
+    subtitle="Modern Learning Environment"
+    description="Our state-of-the-art campus provides inspiring spaces for learning, creativity, and growth. Explore facilities designed to support every aspect of student development and academic excellence."
+    ctaText="Explore Our Campus"
+    ctaLink="#explore-our-campus"
+    backgroundImage="/images/hero-school.png"
+  />
+
+  <!-- Campus Overview -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Modern Learning Spaces</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Our 15-acre campus features contemporary facilities designed to inspire learning, foster creativity, and support the holistic development of every student.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Academic Buildings -->
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 text-center">
+          <Building class="h-12 w-12 text-blue-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Academic Buildings</h3>
+          <p class="text-gray-600 mb-4">
+            Three modern academic buildings housing classrooms, specialized learning spaces, and collaborative areas.
+          </p>
+          <div class="text-sm text-blue-600 font-medium">
+            45 Classrooms • Smart Technology • Climate Controlled
+          </div>
+        </div>
+
+        <!-- Science Complex -->
+        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-8 text-center">
+          <Microscope class="h-12 w-12 text-green-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Science Complex</h3>
+          <p class="text-gray-600 mb-4">
+            Dedicated science building with specialized laboratories for biology, chemistry, physics, and environmental science.
+          </p>
+          <div class="text-sm text-green-600 font-medium">
+            8 Science Labs • Research Areas • Safety Equipment
+          </div>
+        </div>
+
+        <!-- Library & Media Center -->
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-8 text-center">
+          <BookOpen class="h-12 w-12 text-purple-600 mx-auto mb-4" />
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Library & Media Center</h3>
+          <p class="text-gray-600 mb-4">
+            Two-story library with extensive collection, digital resources, quiet study areas, and collaborative spaces.
+          </p>
+          <div class="text-sm text-purple-600 font-medium">
+            25,000+ Books • Digital Resources • Study Pods
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Facility Details -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      
+      <!-- Classrooms & Learning Spaces -->
+      <div class="mb-16">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Modern Classrooms</h2>
+            <p class="text-lg text-gray-600 mb-6">
+              Every classroom is equipped with the latest educational technology and designed to support various learning styles and teaching methodologies.
+            </p>
+
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4">
+                  <span class="text-white text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-1">Interactive Smart Boards</h4>
+                  <p class="text-gray-600 text-sm">85-inch interactive displays in every classroom for dynamic lessons</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4">
+                  <span class="text-white text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-1">Flexible Furniture</h4>
+                  <p class="text-gray-600 text-sm">Modular desks and seating arrangements for collaborative learning</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4">
+                  <span class="text-white text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-1">Natural Lighting</h4>
+                  <p class="text-gray-600 text-sm">Large windows and skylights create bright, welcoming environments</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="flex-shrink-0 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4">
+                  <span class="text-white text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-1">Individual Technology</h4>
+                  <p class="text-gray-600 text-sm">1:1 laptop program and charging stations for seamless integration</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <img 
+              src="/images/modern-classroom.png" 
+              alt="Modern classroom with smart technology" 
+              class="rounded-xl shadow-lg"
+            />
+            <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-xl p-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-primary-600">20</div>
+                <div class="text-sm text-gray-600">Max Class Size</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Science Laboratories -->
+      <div class="mb-16">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="order-2 lg:order-1 relative">
+            <img 
+              src="/images/science-lab.png" 
+              alt="State-of-the-art science laboratory" 
+              class="rounded-xl shadow-lg"
+            />
+            <div class="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl p-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-600">8</div>
+                <div class="text-sm text-gray-600">Science Labs</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-1 lg:order-2">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Science Laboratories</h2>
+            <p class="text-lg text-gray-600 mb-6">
+              Cutting-edge laboratories equipped with modern instruments and safety systems to support hands-on scientific inquiry and research.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white rounded-lg p-4 shadow-sm">
+                <h4 class="font-semibold text-gray-900 mb-2">Biology Labs</h4>
+                <p class="text-sm text-gray-600">Microscopy, cell culture, and molecular biology equipment</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-4 shadow-sm">
+                <h4 class="font-semibold text-gray-900 mb-2">Chemistry Labs</h4>
+                <p class="text-sm text-gray-600">Fume hoods, spectrometers, and analytical instruments</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-4 shadow-sm">
+                <h4 class="font-semibold text-gray-900 mb-2">Physics Labs</h4>
+                <p class="text-sm text-gray-600">Electronics, mechanics, and advanced measurement tools</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-4 shadow-sm">
+                <h4 class="font-semibold text-gray-900 mb-2">Prep Rooms</h4>
+                <p class="text-sm text-gray-600">Safe storage and preparation areas for experiments</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arts & Creative Spaces -->
+      <div class="mb-16">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Arts & Creative Spaces</h2>
+            <p class="text-lg text-gray-600 mb-6">
+              Dedicated spaces for visual arts, music, drama, and digital media that inspire creativity and artistic expression.
+            </p>
+
+            <div class="space-y-6">
+              
+              <div class="flex items-start">
+                <Palette class="h-6 w-6 text-pink-500 mr-4 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-2">Visual Arts Studios</h4>
+                  <p class="text-gray-600 text-sm">
+                    Spacious studios with professional lighting, pottery wheels, kilns, and digital art stations for painting, sculpture, and multimedia projects.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <Music class="h-6 w-6 text-purple-500 mr-4 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-2">Music Rooms</h4>
+                  <p class="text-gray-600 text-sm">
+                    Soundproof practice rooms, recording studio, and performance space with grand piano and full range of instruments.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <Users class="h-6 w-6 text-blue-500 mr-4 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 class="font-semibold text-gray-900 mb-2">Drama Theater</h4>
+                  <p class="text-gray-600 text-sm">
+                    400-seat auditorium with professional lighting and sound systems, plus backstage areas and costume storage.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <img 
+              src="/images/arts-studio.png" 
+              alt="Art studio with student work" 
+              class="rounded-xl shadow-lg"
+            />
+            <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-xl p-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-pink-600">6</div>
+                <div class="text-sm text-gray-600">Creative Spaces</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sports & Recreation -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Sports & Recreation</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Comprehensive athletic facilities supporting competitive sports, physical education, and recreational activities for all skill levels.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-12">
+        <div class="relative">
+          <img 
+            src="/images/sports-facilities.png" 
+            alt="School sports facilities" 
+            class="rounded-xl shadow-lg"
+          />
+        </div>
+
+        <div>
+          <div class="space-y-6">
+            
+            <div class="flex items-start">
+              <Trophy class="h-6 w-6 text-orange-500 mr-4 mt-1 flex-shrink-0" />
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-2">Multi-Purpose Gymnasium</h4>
+                <p class="text-gray-600 text-sm">
+                  Full-size basketball court that converts for volleyball, badminton, and indoor soccer. Retractable seating for 500 spectators.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <Trophy class="h-6 w-6 text-blue-500 mr-4 mt-1 flex-shrink-0" />
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-2">Swimming Pool Complex</h4>
+                <p class="text-gray-600 text-sm">
+                  25-meter competition pool with 6 lanes, separate diving area, and junior pool for younger students.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <Trophy class="h-6 w-6 text-green-500 mr-4 mt-1 flex-shrink-0" />
+              <div>
+                <h4 class="font-semibent text-gray-900 mb-2">Outdoor Fields</h4>
+                <p class="text-gray-600 text-sm">
+                  FIFA-standard soccer field, tennis courts, basketball courts, and track and field facilities with synthetic surfaces.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <Trophy class="h-6 w-6 text-purple-500 mr-4 mt-1 flex-shrink-0" />
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-2">Fitness Center</h4>
+                <p class="text-gray-600 text-sm">
+                  Modern fitness equipment, weight training area, and dedicated spaces for yoga, dance, and martial arts.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sports Statistics -->
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="text-center bg-gray-50 rounded-xl p-6">
+          <div class="text-3xl font-bold text-orange-600 mb-2">12</div>
+          <div class="text-gray-600">Sports Programs</div>
+        </div>
+
+        <div class="text-center bg-gray-50 rounded-xl p-6">
+          <div class="text-3xl font-bold text-blue-600 mb-2">6</div>
+          <div class="text-gray-600">Tennis Courts</div>
+        </div>
+
+        <div class="text-center bg-gray-50 rounded-xl p-6">
+          <div class="text-3xl font-bold text-green-600 mb-2">2</div>
+          <div class="text-gray-600">Soccer Fields</div>
+        </div>
+
+        <div class="text-center bg-gray-50 rounded-xl p-6">
+          <div class="text-3xl font-bold text-purple-600 mb-2">400m</div>
+          <div class="text-gray-600">Athletic Track</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technology & Infrastructure -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Technology & Infrastructure</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Advanced technology infrastructure supporting 21st-century learning and ensuring a safe, connected campus environment.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        
+        <!-- Technology -->
+        <div class="bg-white rounded-xl shadow-md p-8">
+          <Wifi class="h-12 w-12 text-blue-600 mb-6" />
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Digital Infrastructure</h3>
+          <ul class="space-y-3 text-gray-600">
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+              Gigabit fiber internet throughout campus
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+              Campus-wide WiFi with device management
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+              1:1 laptop program for all students
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+              Digital learning management system
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+              Cloud-based storage and collaboration tools
+            </li>
+          </ul>
+        </div>
+
+        <!-- Safety & Security -->
+        <div class="bg-white rounded-xl shadow-md p-8">
+          <Shield class="h-12 w-12 text-green-600 mb-6" />
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Safety & Security</h3>
+          <ul class="space-y-3 text-gray-600">
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+              24/7 security personnel and monitoring
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+              Controlled access with key card system
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+              CCTV surveillance throughout campus
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+              Emergency communication system
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+              Regular safety drills and training
+            </li>
+          </ul>
+        </div>
+
+        <!-- Transportation -->
+        <div class="bg-white rounded-xl shadow-md p-8">
+          <Car class="h-12 w-12 text-orange-600 mb-6" />
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Transportation</h3>
+          <ul class="space-y-3 text-gray-600">
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+              Safe and reliable bus service
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+              GPS tracking for all buses
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+              Trained and certified drivers
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+              Multiple pickup/drop-off points
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+              On-site parking for families
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dining & Wellness -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">Dining & Wellness Facilities</h2>
+          <p class="text-lg text-gray-600 mb-6">
+            Comprehensive facilities supporting student health, nutrition, and well-being throughout the school day.
+          </p>
+
+          <div class="space-y-6">
+            
+            <div class="bg-blue-50 rounded-lg p-6">
+              <h4 class="font-semibold text-gray-900 mb-3">Dining Hall & Cafeteria</h4>
+              <p class="text-gray-600 mb-3">
+                Spacious dining hall accommodating 400 students with flexible seating arrangements and outdoor terrace dining.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• Fresh, nutritious meals prepared daily on-site</li>
+                <li>• International cuisine reflecting our diverse community</li>
+                <li>• Vegetarian, vegan, and special dietary options</li>
+                <li>• Grab-and-go healthy snack options</li>
+              </ul>
+            </div>
+
+            <div class="bg-green-50 rounded-lg p-6">
+              <h4 class="font-semibold text-gray-900 mb-3">Health & Wellness Center</h4>
+              <p class="text-gray-600 mb-3">
+                Fully equipped medical facility staffed by qualified nurses and visiting healthcare professionals.
+              </p>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>• First aid and emergency medical care</li>
+                <li>• Health screenings and immunization tracking</li>
+                <li>• Counseling and mental health support</li>
+                <li>• Quiet rest areas for student wellness</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative">
+          <img 
+            src="/images/dining-hall.png" 
+            alt="Modern school dining hall" 
+            class="rounded-xl shadow-lg"
+          />
+          <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-xl p-4">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-blue-600">400</div>
+              <div class="text-sm text-gray-600">Dining Capacity</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Campus Map & Tour -->
+  <section id="explore-our-campus" class="py-16 bg-primary-500 text-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold mb-4">Explore Our Campus</h2>
+      <p class="text-xl text-primary-100 mb-8 max-w-3xl mx-auto">
+        Experience our facilities firsthand with a personalized campus tour. See how our spaces support learning, creativity, and growth.
+      </p>
+      
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        
+        <!-- Campus Tour -->
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-8">
+          <h3 class="text-xl font-bold mb-4">Schedule a Campus Tour</h3>
+          <p class="text-primary-100 mb-6">
+            Join us for a guided tour of our facilities and meet with our admissions team to learn more about our programs.
+          </p>
+          <a 
+            href="/contact" 
+            class="inline-flex items-center px-6 py-3 bg-white text-primary-600 font-semibold rounded-lg hover:bg-primary-50 transition-colors duration-200"
+          >
+            Schedule Tour
+          </a>
+        </div>
+
+        <!-- Virtual Tour -->
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-8">
+          <h3 class="text-xl font-bold mb-4">Virtual Campus Tour</h3>
+          <p class="text-primary-100 mb-6">
+            Watch our virtual campus tour video to explore our facilities and get a feel for our learning environment.
+          </p>
+          <div class="relative rounded-lg overflow-hidden shadow-lg">
+            <video 
+              autoplay 
+              loop 
+              muted 
+              playsinline
+              class="w-full h-48 object-cover"
+              poster="/images/hero-school.png"
+            >
+              <source src="/videos/school-vitual-tour.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

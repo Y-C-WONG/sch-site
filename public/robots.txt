@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://your-school-domain.com/sitemap.xml
+
+# Disallow sensitive areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /temp/
+
+# Allow common resources
+Allow: /images/
+Allow: /css/
+Allow: /js/
+Allow: /fonts/

@@ -1,0 +1,239 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import NewsCard from '../../components/NewsCard.astro'
+import { supabase } from '../../lib/supabase'
+import type { NewsArticle, Category } from '../../lib/supabase'
+import { Search, Filter, Calendar, Archive } from 'lucide-astro'
+
+// Fetch all published news articles
+let allNews: NewsArticle[] = []
+let categories: Category[] = []
+
+try {
+  const { data: newsData, error: newsError } = await supabase
+    .from('news')
+    .select(`
+      *,
+      category:categories(*),
+      tags:news_tags(tag:tags(*))
+    `)
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+  
+  if (newsError) {
+    console.error('Error fetching news:', newsError)
+  } else {
+    allNews = (newsData || []).map(article => ({
+      ...article,
+      tags: article.tags?.map(t => t.tag).filter(Boolean) || []
+    }))
+  }
+} catch (error) {
+  console.error('Error fetching news:', error)
+}
+
+try {
+  const { data: categoriesData, error: categoriesError } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('is_active', true)
+    .order('name')
+  
+  if (categoriesError) {
+    console.error('Error fetching categories:', categoriesError)
+  } else {
+    categories = categoriesData || []
+  }
+} catch (error) {
+  console.error('Error fetching categories:', error)
+}
+
+// Group articles by year and month for archive display
+const articlesByDate = allNews.reduce((acc, article) => {
+  const date = new Date(article.published_at || article.created_at)
+  const year = date.getFullYear()
+  const month = date.toLocaleDateString('en-US', { month: 'long' })
+  
+  if (!acc[year]) acc[year] = {}
+  if (!acc[year][month]) acc[year][month] = []
+  
+  acc[year][month].push(article)
+  return acc
+}, {} as Record<number, Record<string, NewsArticle[]>>)
+
+// Helper to convert month name to two-digit number for URL
+const monthNameToNumber: { [key: string]: string } = {
+  'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06',
+  'July': '07', 'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12'
+}
+---
+
+<Layout 
+  title="News Archive - International School" 
+  description="Browse our complete news archive. Find past articles, announcements, and updates from International School organized by date and category."
+>
+  <Header />
+  
+  <!-- Page Header -->
+  <section class="py-16 bg-primary-500 text-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <div class="flex items-center justify-center mb-4">
+          <Archive class="h-12 w-12 mr-4" />
+          <h1 class="text-4xl font-bold">News Archive</h1>
+        </div>
+        <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+          Browse our complete collection of news articles, announcements, and updates from International School.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archive Content -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      
+      <!-- Archive Statistics -->
+      <div class="grid md:grid-cols-4 gap-6 mb-12" style: display:none>
+        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
+          <div class="text-3xl font-bold text-primary-600 mb-2">{allNews.length}</div>
+          <div class="text-gray-600">Total Articles</div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
+          <div class="text-3xl font-bold text-blue-600 mb-2">{categories.length}</div>
+          <div class="text-gray-600">Categories</div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
+          <div class="text-3xl font-bold text-green-600 mb-2">{Object.keys(articlesByDate).length}</div>
+          <div class="text-gray-600">Years</div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
+          <div class="text-3xl font-bold text-purple-600 mb-2">{allNews.filter(a => a.is_featured).length}</div>
+          <div class="text-gray-600">Featured</div>
+        </div>
+      </div>
+
+      <!-- Articles by Date -->
+      <div id="articles-container">
+        {Object.keys(articlesByDate).sort((a, b) => Number(b) - Number(a)).map(year => (
+          <div class="mb-12" data-year={year}>
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 flex items-center">
+              <Calendar class="h-8 w-8 mr-3 text-primary-500" />
+              {year}
+            </h2>
+            
+            {Object.keys(articlesByDate[Number(year)]).map(month => (
+              <div class="mb-8" data-month={month}>
+                <h3 class="text-xl font-semibold text-gray-700 mb-6 border-b border-gray-200 pb-2">
+                  <a href={`/news/${year}/${monthNameToNumber[month]}`} class="hover:text-primary-600">
+                    {month} {year}
+                  </a>
+                </h3>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {articlesByDate[Number(year)][month].map(article => (
+                    <div 
+                      class="article-item" 
+                      data-category={article.category?.slug || ''}
+                      data-title={article.title.toLowerCase()}
+                      data-excerpt={article.excerpt?.toLowerCase() || ''}
+                    >
+                      <NewsCard article={article} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <!-- No Results Message -->
+      <div id="no-results" class="text-center py-12 hidden">
+        <div class="text-gray-400 mb-4">
+          <Search class="h-16 w-16 mx-auto" />
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles found</h3>
+        <p class="text-gray-600">Try adjusting your search criteria or filters.</p>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input') as HTMLInputElement
+    const categoryFilter = document.getElementById('category-filter') as HTMLSelectElement
+    const yearFilter = document.getElementById('year-filter') as HTMLSelectElement
+    const articlesContainer = document.getElementById('articles-container')
+    const noResults = document.getElementById('no-results')
+    
+    if (!searchInput || !categoryFilter || !yearFilter || !articlesContainer || !noResults) return
+    
+    function filterArticles() {
+      const searchTerm = searchInput.value.toLowerCase()
+      const selectedCategory = categoryFilter.value
+      const selectedYear = yearFilter.value
+      
+      const articleItems = document.querySelectorAll('.article-item')
+      const yearSections = document.querySelectorAll('[data-year]')
+      const monthSections = document.querySelectorAll('[data-month]')
+      
+      let visibleCount = 0
+      
+      // Hide all sections first
+      yearSections.forEach(section => {
+        (section as HTMLElement).style.display = 'none'
+      })
+      
+      monthSections.forEach(section => {
+        (section as HTMLElement).style.display = 'none'
+      })
+      
+      articleItems.forEach(item => {
+        const element = item as HTMLElement
+        const title = element.dataset.title || ''
+        const excerpt = element.dataset.excerpt || ''
+        const category = element.dataset.category || ''
+        const yearSection = element.closest('[data-year]') as HTMLElement
+        const monthSection = element.closest('[data-month]') as HTMLElement
+        
+        const matchesSearch = !searchTerm || title.includes(searchTerm) || excerpt.includes(searchTerm)
+        const matchesCategory = !selectedCategory || category === selectedCategory
+        const matchesYear = !selectedYear || yearSection?.dataset.year === selectedYear
+        
+        const isVisible = matchesSearch && matchesCategory && matchesYear
+        
+        element.style.display = isVisible ? 'block' : 'none'
+        
+        if (isVisible) {
+          visibleCount++
+          // Show parent sections
+          if (yearSection) yearSection.style.display = 'block'
+          if (monthSection) monthSection.style.display = 'block'
+        }
+      })
+      
+      // Show/hide no results message
+      if (visibleCount === 0) {
+        articlesContainer.style.display = 'none'
+        noResults.classList.remove('hidden')
+      } else {
+        articlesContainer.style.display = 'block'
+        noResults.classList.add('hidden')
+      }
+    }
+    
+    // Add event listeners
+    searchInput.addEventListener('input', filterArticles)
+    categoryFilter.addEventListener('change', filterArticles)
+    yearFilter.addEventListener('change', filterArticles)
+  })
+</script>

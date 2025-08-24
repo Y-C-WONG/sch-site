@@ -1,0 +1,353 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import Hero from '../components/Hero.astro'
+import { Users, Award, Globe, BookOpen, Heart, Target, Eye, Lightbulb } from 'lucide-astro'
+---
+
+<Layout 
+  title="About Us - International School" 
+  description="Learn about our mission, vision, and commitment to excellence in international education. Discover our story, leadership team, and educational philosophy."
+>
+  <Header />
+  
+  <!-- Hero Section -->
+  <Hero 
+    title="About International School"
+    subtitle="Our Story"
+    description="For over 25 years, we have been committed to nurturing global citizens through excellence in international education, character development, and innovative learning."
+    ctaText="Meet Our Team"
+    ctaLink="#leadership"
+    backgroundImage="/images/hero-school.png"
+  />
+
+  <!-- Mission & Vision -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12">
+        
+        <!-- Mission -->
+        <div class="bg-primary-50 rounded-xl p-8">
+          <div class="flex items-center mb-6">
+            <Target class="h-8 w-8 text-primary-600 mr-3" />
+            <h2 class="text-2xl font-bold text-gray-900">Our Mission</h2>
+          </div>
+          <p class="text-lg text-gray-700 leading-relaxed">
+            To provide a world-class international education that develops knowledgeable, caring, and globally-minded individuals who are prepared to create a better world through understanding, respect, and intercultural dialogue.
+          </p>
+        </div>
+
+        <!-- Vision -->
+        <div class="bg-blue-50 rounded-xl p-8">
+          <div class="flex items-center mb-6">
+            <Eye class="h-8 w-8 text-blue-600 mr-3" />
+            <h2 class="text-2xl font-bold text-gray-900">Our Vision</h2>
+          </div>
+          <p class="text-lg text-gray-700 leading-relaxed">
+            To be a leading international school that inspires students to achieve academic excellence, develop strong character, and become compassionate leaders who make meaningful contributions to their communities and the world.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        
+        <!-- Content -->
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
+          <div class="prose prose-lg text-gray-600 space-y-4">
+            <p>
+              Founded in 1999 by a group of passionate educators and parents, International School began as a small community school with a big vision: to create an educational environment where students from diverse backgrounds could learn together, grow together, and prepare for a globally connected future.
+            </p>
+            <p>
+              What started with just 50 students in a single building has grown into a thriving educational community of over 500 students from 25+ countries. Our growth reflects not just increasing enrollment, but an expanding commitment to educational excellence and innovation.
+            </p>
+            <p>
+              Throughout our journey, we have remained true to our founding principles while continuously evolving to meet the changing needs of our students and the world they will inherit. Today, we are proud to be recognized as one of the region's leading international schools.
+            </p>
+          </div>
+
+          <!-- Timeline Highlights -->
+          <div class="mt-8 space-y-4">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                1999
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-900">School Founded</h4>
+                <p class="text-gray-600">Established with 50 students and a vision for international education</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                2005
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-900">IB Authorization</h4>
+                <p class="text-gray-600">Became an authorized IB World School</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                2015
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-900">Campus Expansion</h4>
+                <p class="text-gray-600">Opened new facilities including science labs and arts center</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                2025
+              </div>
+              <div class="ml-4">
+                <h4 class="font-semibold text-gray-900">25th Anniversary</h4>
+                <p class="text-gray-600">Celebrating 25 years of educational excellence</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image -->
+        <div class="relative">
+          <img 
+            src="/images/school-history.png" 
+            alt="School historical photo" 
+            class="rounded-xl shadow-lg"
+          />
+          
+          <!-- Stats Overlay -->
+          <div class="absolute -bottom-6 -right-6 bg-white rounded-xl shadow-xl p-6">
+            <div class="grid grid-cols-2 gap-4 text-center">
+              <div>
+                <div class="text-2xl font-bold text-primary-600">500+</div>
+                <div class="text-xs text-gray-600">Students</div>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-primary-600">25+</div>
+                <div class="text-xs text-gray-600">Countries</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Values -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Core Values</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          These fundamental values guide every aspect of our educational approach and school community.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Excellence -->
+        <div class="text-center group">
+          <div class="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-red-200 transition-colors duration-300">
+            <Award class="h-8 w-8 text-red-600" />
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Excellence</h3>
+          <p class="text-gray-600">
+            Striving for the highest standards in all aspects of education, from academic achievement to personal development.
+          </p>
+        </div>
+
+        <!-- Respect -->
+        <div class="text-center group">
+          <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors duration-300">
+            <Heart class="h-8 w-8 text-blue-600" />
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Respect</h3>
+          <p class="text-gray-600">
+            Valuing diversity, fostering understanding, and treating all members of our community with dignity and care.
+          </p>
+        </div>
+
+        <!-- Innovation -->
+        <div class="text-center group">
+          <div class="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors duration-300">
+            <Lightbulb class="h-8 w-8 text-green-600" />
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Innovation</h3>
+          <p class="text-gray-600">
+            Embracing creativity, critical thinking, and forward-looking approaches to prepare students for tomorrow's challenges.
+          </p>
+        </div>
+
+        <!-- Community -->
+        <div class="text-center group">
+          <div class="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors duration-300">
+            <Users class="h-8 w-8 text-purple-600" />
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Community</h3>
+          <p class="text-gray-600">
+            Building strong relationships and fostering collaboration among students, families, faculty, and the broader community.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Leadership Team -->
+  <section id="leadership" class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Leadership Team</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Our experienced leadership team brings together decades of educational expertise and a shared commitment to student success.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Principal -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <img 
+            src="/images/principal.png" 
+            alt="Dr. Sarah Johnson, Principal" 
+            class="w-full h-96 object-contain bg-gray-50"
+          />
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">Dr. Sarah Johnson</h3>
+            <p class="text-primary-600 font-medium mb-3">Principal</p>
+            <p class="text-gray-600 text-sm">
+              With over 20 years in international education, Dr. Johnson leads our school with a vision for innovation and excellence. She holds a PhD in Educational Leadership from Cambridge University.
+            </p>
+          </div>
+        </div>
+
+        <!-- Academic Director -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <img 
+            src="/images/academic-director.png" 
+            alt="Mr. James Chen, Academic Director" 
+            class="w-full h-96 object-contain bg-gray-50"
+          />
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">Mr. James Chen</h3>
+            <p class="text-primary-600 font-medium mb-3">Academic Director</p>
+            <p class="text-gray-600 text-sm">
+              Mr. Chen oversees our curriculum development and academic programs. He brings 15 years of experience in IB education and holds a Master's in International Education.
+            </p>
+          </div>
+        </div>
+
+        <!-- Student Services Director -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <img 
+            src="/images/student-services-director.png" 
+            alt="Ms. Maria Rodriguez, Student Services Director" 
+            class="w-full h-96 object-contain bg-gray-50"
+          />
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">Ms. Maria Rodriguez</h3>
+            <p class="text-primary-600 font-medium mb-3">Student Services Director</p>
+            <p class="text-gray-600 text-sm">
+              Ms. Rodriguez leads our student support services, counseling, and character development programs. She has 12 years of experience in international school settings.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accreditation & Partnerships -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Accreditation & Partnerships</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Our commitment to quality is recognized by leading international educational organizations and accrediting bodies.
+        </p>
+      </div>
+
+      <!-- Accreditation Logos -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center mb-12">
+        <div class="text-center p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
+          <img src="/images/ib-logo.png" alt="International Baccalaureate" class="h-16 mx-auto mb-2" />
+          <div class="text-sm font-medium text-gray-700">IB World School</div>
+        </div>
+        
+        <div class="text-center p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
+          <img src="/images/cambridge-logo.png" alt="Cambridge Assessment" class="h-16 mx-auto mb-2" />
+          <div class="text-sm font-medium text-gray-700">Cambridge International</div>
+        </div>
+        
+        <div class="text-center p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
+          <img src="/images/wasc-logo.png" alt="WASC Accreditation" class="h-16 mx-auto mb-2" />
+          <div class="text-sm font-medium text-gray-700">WASC Accredited</div>
+        </div>
+        
+        <div class="text-center p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
+          <img src="/images/council-logo.png" alt="Council of International Schools" class="h-16 mx-auto mb-2" />
+          <div class="text-sm font-medium text-gray-700">CIS Member</div>
+        </div>
+      </div>
+
+      <!-- Accreditation Details -->
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">International Recognition</h3>
+          <ul class="space-y-3 text-gray-600">
+            <li class="flex items-start">
+              <Award class="h-5 w-5 text-primary-500 mr-3 mt-0.5 flex-shrink-0" />
+              <span>Authorized IB World School offering the International Baccalaureate Diploma Programme</span>
+            </li>
+            <li class="flex items-start">
+              <Award class="h-5 w-5 text-primary-500 mr-3 mt-0.5 flex-shrink-0" />
+              <span>Cambridge International School providing IGCSE and A-Level qualifications</span>
+            </li>
+            <li class="flex items-start">
+              <Award class="h-5 w-5 text-primary-500 mr-3 mt-0.5 flex-shrink-0" />
+              <span>WASC (Western Association of Schools and Colleges) accredited institution</span>
+            </li>
+            <li class="flex items-start">
+              <Award class="h-5 w-5 text-primary-500 mr-3 mt-0.5 flex-shrink-0" />
+              <span>Member of the Council of International Schools (CIS)</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Educational Philosophy</h3>
+          <p class="text-gray-600 mb-4">
+            Our educational approach is grounded in research-based practices and international best standards. We believe in:
+          </p>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+              Student-centered learning and inquiry-based education
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+              Multicultural understanding and global citizenship
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+              Character development alongside academic excellence
+            </li>
+            <li class="flex items-center">
+              <div class="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+              Innovation and creative problem-solving skills
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

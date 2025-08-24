@@ -1,0 +1,269 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import Hero from '../../components/Hero.astro'
+import NewsCard from '../../components/NewsCard.astro'
+import EventCard from '../../components/EventCard.astro'
+import CalendarWidget from '../../components/CalendarWidget.astro'
+import { supabase } from '../../lib/supabase'
+import type { NewsArticle, Event, Category, Tag } from '../../lib/supabase'
+import { Calendar, Search, Filter, Archive } from 'lucide-astro'
+
+// Fetch news articles from database
+let featuredNews: NewsArticle[] = []
+try {
+  const { data: newsData, error: newsError } = await supabase
+    .from('news')
+    .select(`
+      *,
+      category:categories(*),
+      tags:news_tags(tag:tags(*))
+    `)
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+  
+  if (newsError) {
+    console.error('Error fetching news:', newsError)
+  } else {
+    // Transform the data to match the expected format
+    featuredNews = (newsData || []).map(article => ({
+      ...article,
+      tags: article.tags?.map(t => t.tag).filter(Boolean) || []
+    }))
+  }
+} catch (error) {
+  console.error('Error fetching news:', error)
+  featuredNews = []
+}
+
+// Fetch upcoming events from database
+let upcomingEvents: Event[] = []
+try {
+  const currentDate = new Date().toISOString().split('T')[0]
+  const { data: eventsData, error: eventsError } = await supabase
+    .from('events')
+    .select(`
+      *,
+      category:categories(*),
+      tags:event_tags(tag:tags(*))
+    `)
+    .eq('status', 'published')
+    .gte('start_date', currentDate)
+    .order('start_date', { ascending: true })
+  
+  if (eventsError) {
+    console.error('Error fetching events:', eventsError)
+  } else {
+    // Transform the data to match the expected format
+    upcomingEvents = (eventsData || []).map(event => ({
+      ...event,
+      tags: event.tags?.map(t => t.tag).filter(Boolean) || []
+    }))
+  }
+} catch (error) {
+  console.error('Error fetching events:', error)
+  upcomingEvents = []
+}
+
+// Fetch categories from database
+let categories: (Category & { count: number })[] = []
+try {
+  const { data: categoriesData, error: categoriesError } = await supabase
+    .from('categories')
+    .select('id, name, slug')
+    .eq('is_active', true)
+    .order('name')
+  
+  if (categoriesError) {
+    console.error('Error fetching categories:', categoriesError)
+  } else {
+    // For now, we'll set count to 0 - you can implement actual counting later
+    categories = (categoriesData || []).map(category => ({
+      ...category,
+      count: 0
+    }))
+  }
+} catch (error) {
+  console.error('Error fetching categories:', error)
+  categories = []
+}
+---
+
+<Layout 
+  title="News & Events - International School" 
+  description="Stay updated with the latest news, announcements, and upcoming events at International School. Discover student achievements, school activities, and important information for our community."
+>
+  <Header />
+  
+  <!-- Hero Section -->
+  <Hero 
+    title="News & Events"
+    subtitle="Stay Connected"
+    description="Keep up with the latest happenings at International School. From student achievements to upcoming events, find all the information you need to stay engaged with our community."
+    ctaText="View Archive"
+    ctaLink="/news/archive"
+    backgroundImage="/images/hero-school-wider.png"
+  />
+
+  <!-- Main Content -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-4 gap-8">
+        
+        <!-- Main Content Area -->
+        <div class="lg:col-span-3">
+          
+          <!-- Featured News -->
+          <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-2xl font-bold text-gray-900">Latest News</h2>
+              <a 
+                href="/news/archive" 
+                class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
+              >
+                <Archive class="h-4 w-4 mr-1" />
+                View Archive
+              </a>
+            </div>
+            
+            <div class="grid gap-8">
+              {featuredNews.map((article, index) => (
+                <NewsCard article={article} featured={index === 0} />
+              ))}
+            </div>
+          </div>
+
+          <!-- Events Section -->
+          <div id="events">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-2xl font-bold text-gray-900">Upcoming Events</h2>
+              <a 
+                href="/events" 
+                class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
+              >
+                <Calendar class="h-4 w-4 mr-1" />
+                View All Events
+              </a>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+              {upcomingEvents.map(event => (
+                <EventCard event={event} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-8">
+          
+          <!-- Calendar Widget -->
+          <CalendarWidget events={upcomingEvents} />
+          
+          <!-- Categories -->
+          <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-primary-500 text-white p-4">
+              <h3 class="text-lg font-semibold flex items-center">
+                <Filter class="h-5 w-5 mr-2" />
+                Categories
+              </h3>
+            </div>
+            <div class="p-4">
+              <div class="space-y-2">
+                {categories.map(category => (
+                  <a 
+                    href={`/news/category/${category.slug}`}
+                    class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  >
+                    <span class="text-gray-700 group-hover:text-primary-600">{category.name}</span>
+                    <span class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      {category.count}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-blue-500 text-white p-4">
+              <h3 class="text-lg font-semibold">Popular Tags</h3>
+            </div>
+            <div class="p-4">
+              <div class="flex flex-wrap gap-2">
+                <a href="/news/tag/achievement" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors duration-200">
+                  Achievement
+                </a>
+                <a href="/news/tag/student" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 hover:bg-green-200 transition-colors duration-200">
+                  Student
+                </a>
+                <a href="/news/tag/important" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 hover:bg-red-200 transition-colors duration-200">
+                  Important
+                </a>
+                <a href="/news/tag/parent" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 hover:bg-purple-200 transition-colors duration-200">
+                  Parent
+                </a>
+                <a href="/news/tag/deadline" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 hover:bg-orange-200 transition-colors duration-200">
+                  Deadline
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Newsletter Signup -->
+          <div class="bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl p-6 text-white" style="display: none;">
+            <h3 class="text-lg font-bold mb-3">Stay Updated</h3>
+            <p class="text-primary-100 text-sm mb-4">
+              Subscribe to our newsletter to receive the latest news and event updates directly in your inbox.
+            </p>
+            
+            <form class="space-y-3">
+              <input 
+                type="email" 
+                placeholder="Your email address"
+                class="w-full px-3 py-2 rounded-lg border-0 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+              />
+              <button 
+                type="submit"
+                class="w-full px-4 py-2 bg-white text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors duration-200"
+              >
+                Subscribe
+              </button>
+            </form>
+            
+            <p class="text-xs text-primary-200 mt-3">
+              You can unsubscribe at any time. We respect your privacy.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-green-500 text-white p-4">
+              <h3 class="text-lg font-semibold">Quick Links</h3>
+            </div>
+            <div class="p-4">
+              <div class="space-y-2">
+                <a href="/academic-year" class="block py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-gray-700 hover:text-primary-600">
+                  Apply for Admission
+                </a>
+                <a href="/campus-facilities" class="block py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-gray-700 hover:text-primary-600">
+                  Schedule Campus Tour
+                </a>
+                <a href="/academic-programs" class="block py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-gray-700 hover:text-primary-600">
+                  Academic Programs
+                </a>
+                <a href="/contact" class="block py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-gray-700 hover:text-primary-600">
+                  Contact Us
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,150 @@
+---
+import { Facebook, Instagram, Linkedin, Menu, X, Phone, Mail } from 'lucide-astro'
+
+const currentPath = Astro.url.pathname
+---
+
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <nav class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center">
+          <img class="h-10 w-auto" src="/images/logo.png" alt="International School" />
+          <span class="ml-2 text-xl font-bold text-gray-900 hidden sm:block">International School</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-4">
+          <a href="/" class={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${currentPath === '/' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+            Home
+          </a>
+          <a href="/about/" class={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${currentPath === '/about/' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+            About Us
+          </a>
+          <a href="/academic-programs/" class={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${currentPath === '/academic-programs/' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+            Academic Programs
+          </a>
+          <a href="/academic-year/" class={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${currentPath === '/academic-year/' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+            Academic Year
+          </a>
+          <a href="/campus-facilities/" class={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${currentPath === '/campus-facilities/' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+            Campus & Facilities
+          </a>
+          <a href="/news/" class={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${currentPath === '/news/' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+            News & Events
+          </a>
+          <a href="/contact/" class={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${currentPath === '/contact/' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+            Contact Us
+          </a>
+        </div>
+      </div>
+
+     <!-- Social Media Links -->
+      <div class="flex space-x-6">
+        <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors duration-200" aria-label="Facebook">
+          <Facebook class="h-5 w-5" />
+        </a>
+        <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors duration-200" aria-label="Instagram">
+          <Instagram class="h-5 w-5" />
+        </a>
+        <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors duration-200" aria-label="LinkedIn">
+          <Linkedin class="h-5 w-5" />
+        </a>
+      </div>
+
+      <!-- Contact Phone (Desktop) -->
+      <div class="hidden lg:flex items-center">
+        <div class="flex flex-col space-y-1">
+          <div class="flex items-center">
+            <Phone class="h-4 w-4 text-primary-600 mr-2" />
+            <span class="text-sm font-medium text-gray-900">+1-555-0123</span>
+          </div>
+          <div class="flex items-center">
+            <Mail class="h-4 w-4 text-primary-600 mr-2" />
+            <span class="text-sm font-medium text-gray-900">info@school.edu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button type="button" class="mobile-menu-button bg-gray-50 inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500" aria-controls="mobile-menu" aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <Menu class="menu-icon h-6 w-6" />
+          <X class="close-icon h-6 w-6 hidden" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-menu md:hidden hidden">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+        <a href="/" class={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${currentPath === '/' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+          Home
+        </a>
+        <a href="/about" class={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${currentPath === '/about' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+          About Us
+        </a>
+        <a href="/academic-programs" class={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${currentPath === '/academic-programs' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+          Academic Programs
+        </a>
+        <a href="/academic-year" class={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${currentPath === '/academic-year' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+          Academic Year
+        </a>
+        <a href="/campus-facilities" class={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${currentPath === '/campus-facilities' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+          Campus & Facilities
+        </a>
+        <a href="/news" class={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${currentPath.startsWith('/news') ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+          News & Events
+        </a>
+        <a href="/contact" class={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${currentPath === '/contact' ? 'bg-primary-500 text-white' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'}`}>
+          Contact Us
+        </a>
+        
+        <!-- Mobile Contact Info -->
+        <div class="border-t border-gray-200 pt-3 mt-3">
+          <div class="flex items-center px-3 py-2">
+            <Phone class="h-4 w-4 text-primary-600 mr-2" />
+            <span class="text-sm font-medium text-gray-900">+1-555-0123</span>
+          </div>
+          <div class="flex items-center px-3 py-2">
+            <Mail class="h-4 w-4 text-primary-600 mr-2" />
+            <span class="text-sm font-medium text-gray-900">info@school.edu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Mobile menu toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuButton = document.querySelector('.mobile-menu-button')
+    const mobileMenu = document.querySelector('.mobile-menu')
+    const menuIcon = document.querySelector('.menu-icon')
+    const closeIcon = document.querySelector('.close-icon')
+    
+    if (mobileMenuButton && mobileMenu && menuIcon && closeIcon) {
+      mobileMenuButton.addEventListener('click', function() {
+        const isHidden = mobileMenu.classList.contains('hidden')
+        
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden')
+          menuIcon.classList.add('hidden')
+          closeIcon.classList.remove('hidden')
+          mobileMenuButton.setAttribute('aria-expanded', 'true')
+        } else {
+          mobileMenu.classList.add('hidden')
+          menuIcon.classList.remove('hidden')
+          closeIcon.classList.add('hidden')
+          mobileMenuButton.setAttribute('aria-expanded', 'false')
+        }
+      })
+    }
+  })
+</script>
+</header>
