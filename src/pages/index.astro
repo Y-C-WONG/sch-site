@@ -6,94 +6,67 @@ import Hero from '../components/Hero.astro'
 import NewsCard from '../components/NewsCard.astro'
 import EventCard from '../components/EventCard.astro'
 import CalendarWidget from '../components/CalendarWidget.astro'
+import { supabase } from '../lib/supabase'
+import type { NewsArticle, Event } from '../lib/supabase'
 import { BookOpen, Users, Award, Globe, ChevronRight, Play } from 'lucide-astro'
 
-// Mock data for demonstration - will be replaced with database queries
-const featuredNews = [
-  {
-    id: 1,
-    title: "Science Fair Winners Announced",
-    slug: "science-fair-winners-2024",
-    excerpt: "Our students excelled at this year's science fair with innovative projects that impressed judges and visitors alike.",
-    content: "",
-    category_id: 2,
-    status: "published" as const,
-    is_featured: true,
-    published_at: "2024-03-15T10:00:00Z",
-    created_at: "2024-03-15T10:00:00Z",
-    updated_at: "2024-03-15T10:00:00Z",
-    category: { id: 2, name: "Academic", slug: "academic", type: "both" as const, is_active: true, created_at: "", updated_at: "" }
-  },
-  {
-    id: 2,
-    title: "New Library Opening This Fall",
-    slug: "new-library-opening-fall-2024",
-    excerpt: "State-of-the-art learning facility with modern technology and comfortable study spaces for all students.",
-    content: "",
-    category_id: 1,
-    status: "published" as const,
-    is_featured: false,
-    published_at: "2024-03-10T14:30:00Z",
-    created_at: "2024-03-10T14:30:00Z",
-    updated_at: "2024-03-10T14:30:00Z",
-    category: { id: 1, name: "General", slug: "general", type: "news" as const, is_active: true, created_at: "", updated_at: "" }
-  },
-  {
-    id: 3,
-    title: "Soccer Team Wins Regional Championship",
-    slug: "soccer-team-regional-championship-2024",
-    excerpt: "Congratulations to our varsity soccer team for their outstanding performance in the regional championship.",
-    content: "",
-    category_id: 3,
-    status: "published" as const,
-    is_featured: false,
-    published_at: "2024-03-08T16:00:00Z",
-    created_at: "2024-03-08T16:00:00Z",
-    updated_at: "2024-03-08T16:00:00Z",
-    category: { id: 3, name: "Sports", slug: "sports", type: "both" as const, is_active: true, created_at: "", updated_at: "" }
+// Fetch featured news from database
+let featuredNews: NewsArticle[] = []
+try {
+  const { data: newsData, error: newsError } = await supabase
+    .from('news')
+    .select(`
+      *,
+      category:categories(*),
+      tags:news_tags(tag:tags(*))
+    `)
+    .eq('status', 'published')
+    .order('is_featured', { ascending: false })
+    .order('published_at', { ascending: false })
+    .limit(5)
+  
+  if (newsError) {
+    console.error('Error fetching news:', newsError)
+  } else {
+    // Transform the data to match the expected format
+    featuredNews = (newsData || []).map(article => ({
+      ...article,
+      tags: article.tags?.map(t => t.tag).filter(Boolean) || []
+    }))
   }
-]
+} catch (error) {
+  console.error('Error fetching news:', error)
+  featuredNews = []
+}
 
-const upcomingEvents = [
-  {
-    id: 1,
-    title: "Parent-Teacher Conference",
-    slug: "parent-teacher-conference-march-2024",
-    description: "Meet with your child's teachers to discuss academic progress and development.",
-    content: "",
-    category_id: 2,
-    start_date: "2024-03-25",
-    start_time: "14:00:00",
-    end_time: "18:00:00",
-    location: "Main Campus",
-    is_all_day: false,
-    is_recurring: false,
-    status: "published" as const,
-    is_featured: true,
-    created_at: "2024-03-01T10:00:00Z",
-    updated_at: "2024-03-01T10:00:00Z",
-    category: { id: 2, name: "Academic", slug: "academic", type: "both" as const, is_active: true, created_at: "", updated_at: "", color: "#3B82F6" }
-  },
-  {
-    id: 2,
-    title: "Spring Music Concert",
-    slug: "spring-music-concert-2024",
-    description: "Annual spring concert featuring our talented student musicians and vocalists.",
-    content: "",
-    category_id: 4,
-    start_date: "2024-04-15",
-    start_time: "19:00:00",
-    end_time: "21:00:00",
-    location: "School Auditorium",
-    is_all_day: false,
-    is_recurring: false,
-    status: "published" as const,
-    is_featured: false,
-    created_at: "2024-03-01T10:00:00Z",
-    updated_at: "2024-03-01T10:00:00Z",
-    category: { id: 4, name: "Arts", slug: "arts", type: "both" as const, is_active: true, created_at: "", updated_at: "", color: "#8B5CF6" }
+// Fetch upcoming events from database
+let upcomingEvents: Event[] = []
+try {
+  const currentDate = new Date().toISOString().split('T')[0]
+  const { data: eventsData, error: eventsError } = await supabase
+    .from('events')
+    .select(`
+      *,
+      category:categories(*),
+      tags:event_tags(tag:tags(*))
+    `)
+    .eq('status', 'published')
+    .gte('start_date', currentDate)
+    .order('start_date', { ascending: true })
+  
+  if (eventsError) {
+    console.error('Error fetching events:', eventsError)
+  } else {
+    // Transform the data to match the expected format
+    upcomingEvents = (eventsData || []).map(event => ({
+      ...event,
+      tags: event.tags?.map(t => t.tag).filter(Boolean) || []
+    }))
   }
-]
+} catch (error) {
+  console.error('Error fetching events:', error)
+  upcomingEvents = []
+}
 ---
 
 <Layout title="International School - Excellence in Education" description="Leading international school providing world-class education from Primary through Sixth Form. Nurturing global citizens through innovative learning and character development.">
@@ -440,10 +413,22 @@ const upcomingEvents = [
             </a>
           </div>
           
-          <div class="grid gap-8">
-            {featuredNews.map((article, index) => (
-              <NewsCard article={article} featured={index === 0} />
-            ))}
+          <div class="space-y-8">
+            {/* First article spans full width */}
+            {featuredNews.length > 0 && (
+              <div>
+                <NewsCard article={featuredNews[0]} featured={true} />
+              </div>
+            )}
+            
+            {/* Remaining articles in 2-column grid */}
+            {featuredNews.length > 1 && (
+              <div class="grid md:grid-cols-2 gap-8">
+                {featuredNews.slice(1).map((article) => (
+                  <NewsCard article={article} featured={false} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -465,7 +450,7 @@ const upcomingEvents = [
               
               <div class="pt-4 border-t border-gray-200">
                 <a 
-                  href="/news#events" 
+                  href="/events" 
                   class="inline-flex items-center justify-center w-full px-4 py-2 bg-primary-500 text-white font-medium rounded-lg hover:bg-primary-600 transition-colors duration-200"
                 >
                   View All Events
