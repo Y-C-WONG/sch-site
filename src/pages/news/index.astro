@@ -21,7 +21,9 @@ try {
       tags:news_tags(tag:tags(*))
     `)
     .eq('status', 'published')
+    .order('is_featured', { ascending: false })
     .order('published_at', { ascending: false })
+    .limit(9)
   
   if (newsError) {
     console.error('Error fetching news:', newsError)
@@ -127,10 +129,22 @@ try {
               </a>
             </div>
             
-            <div class="grid gap-8">
-              {featuredNews.map((article, index) => (
-                <NewsCard article={article} featured={index === 0} />
-              ))}
+            <div class="space-y-8">
+              {/* First article spans full width */}
+              {featuredNews.length > 0 && (
+                <div>
+                  <NewsCard article={featuredNews[0]} featured={true} />
+                </div>
+              )}
+              
+              {/* Remaining articles in 2-column grid */}
+              {featuredNews.length > 1 && (
+                <div class="grid md:grid-cols-2 gap-8">
+                  {featuredNews.slice(1).map((article) => (
+                    <NewsCard article={article} featured={false} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

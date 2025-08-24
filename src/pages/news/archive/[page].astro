@@ -1,0 +1,221 @@
+---
+import Layout from '../../../layouts/Layout.astro'
+import Header from '../../../components/Header.astro'
+import Footer from '../../../components/Footer.astro'
+import NewsCard from '../../../components/NewsCard.astro'
+import { supabase } from '../../../lib/supabase'
+import type { NewsArticle, Category } from '../../../lib/supabase'
+import { Search, Filter, Calendar, Archive, ChevronLeft, ChevronRight } from 'lucide-astro'
+
+export async function getStaticPaths() {
+  const limit = 12;
+  
+  // Get total count of articles
+  const { count, error: countError } = await supabase
+    .from('news')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'published')
+  
+  if (countError || !count) {
+    console.error('Error counting articles for static paths:', countError)
+    return [{ params: { page: '1' } }]
+  }
+
+  const totalPages = Math.ceil(count / limit)
+  const paths = []
+
+  // Generate paths for all pages (starting from page 2 since page 1 is /news/archive)
+  for (let page = 2; page <= totalPages; page++) {
+    const offset = (page - 1) * limit
+
+    // Fetch articles for this page
+    const { data: newsData, error: newsError } = await supabase
+      .from('news')
+      .select(`
+        *,
+        category:categories(*),
+        tags:news_tags(tag:tags(*))
+      `)
+      .eq('status', 'published')
+      .order('published_at', { ascending: false })
+      .range(offset, offset + limit - 1)
+    
+    if (newsError) {
+      console.error('Error fetching news for page', page, newsError)
+      continue
+    }
+
+    const articles = (newsData || []).map(article => ({
+      ...article,
+      tags: article.tags?.map(t => t.tag).filter(Boolean) || []
+    }))
+
+    paths.push({
+      params: { page: page.toString() },
+      props: { 
+        articles,
+        totalArticles: count,
+        currentPage: page,
+        totalPages,
+        limit
+      }
+    })
+  }
+
+  return paths
+}
+
+const { articles, totalArticles, currentPage, totalPages, limit } = Astro.props
+const page = currentPage
+
+// Calculate pagination
+const hasNextPage = page < totalPages
+const hasPrevPage = page > 1
+
+// Generate page numbers for pagination
+const pageNumbers: number[] = []
+const startPage = Math.max(1, page - 2)
+const endPage = Math.min(totalPages, page + 2)
+
+for (let i = startPage; i <= endPage; i++) {
+  pageNumbers.push(i)
+}
+---
+
+<Layout 
+  title={`News Archive - Page ${page} - International School`}
+  description={`Browse our complete collection of news articles, announcements, and updates from International School. Page ${page} of ${totalPages}.`}
+>
+  <Header />
+  
+  <!-- Page Header -->
+  <section class="py-16 bg-primary-500 text-white">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <div class="flex items-center justify-center mb-4">
+          <Archive class="h-12 w-12 mr-4" />
+          <h1 class="text-4xl font-bold">News Archive</h1>
+        </div>
+        <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+          Browse our complete collection of news articles, announcements, and updates from International School.
+        </p>
+        <div class="mt-4 text-primary-200">
+          Page {page} of {totalPages} • {totalArticles} articles total
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archive Content -->
+  <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+      
+      <!-- Articles Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        {articles.map(article => (
+          <NewsCard article={article} />
+        ))}
+      </div>
+
+      <!-- No Articles Message -->
+      {articles.length === 0 && (
+        <div class="text-center py-12">
+          <div class="text-gray-400 mb-4">
+            <Archive class="h-16 w-16 mx-auto" />
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles found</h3>
+          <p class="text-gray-600">There are currently no published articles on this page.</p>
+        </div>
+      )}
+
+      <!-- Pagination -->
+      {totalPages > 1 && (
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-xl p-6 shadow-sm">
+          
+          <!-- Previous Button -->
+          <div class="flex-1">
+            {hasPrevPage ? (
+              <a 
+                href={page === 2 ? '/news/archive' : `/news/archive/${page - 1}`}
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-primary-600 transition-colors duration-200"
+              >
+                <ChevronLeft class="h-4 w-4 mr-2" />
+                Previous
+              </a>
+            ) : (
+              <div class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+                <ChevronLeft class="h-4 w-4 mr-2" />
+                Previous
+              </div>
+            )}
+          </div>
+
+          <!-- Page Numbers -->
+          <div class="flex items-center space-x-1">
+            {page > 3 && (
+              <>
+                <a 
+                  href="/news/archive"
+                  class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                >
+                  1
+                </a>
+                {page > 4 && (
+                  <span class="px-2 py-2 text-sm text-gray-400">...</span>
+                )}
+              </>
+            )}
+            
+            {pageNumbers.map(pageNum => (
+              <a
+                href={pageNum === 1 ? '/news/archive' : `/news/archive/${pageNum}`}
+                class={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  pageNum === page 
+                    ? 'bg-primary-600 text-white' 
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                }`}
+              >
+                {pageNum}
+              </a>
+            ))}
+            
+            {page < totalPages - 2 && (
+              <>
+                {page < totalPages - 3 && (
+                  <span class="px-2 py-2 text-sm text-gray-400">...</span>
+                )}
+                <a 
+                  href={`/news/archive/${totalPages}`}
+                  class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                >
+                  {totalPages}
+                </a>
+              </>
+            )}
+          </div>
+
+          <!-- Next Button -->
+          <div class="flex-1 flex justify-end">
+            {hasNextPage ? (
+              <a 
+                href={`/news/archive/${page + 1}`}
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-primary-600 transition-colors duration-200"
+              >
+                Next
+                <ChevronRight class="h-4 w-4 ml-2" />
+              </a>
+            ) : (
+              <div class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+                Next
+                <ChevronRight class="h-4 w-4 ml-2" />
+              </div>
+            )}
+          </div>
+
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

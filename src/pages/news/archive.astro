@@ -5,13 +5,32 @@ import Footer from '../../components/Footer.astro'
 import NewsCard from '../../components/NewsCard.astro'
 import { supabase } from '../../lib/supabase'
 import type { NewsArticle, Category } from '../../lib/supabase'
-import { Search, Filter, Calendar, Archive } from 'lucide-astro'
+import { Search, Filter, Calendar, Archive, ChevronLeft, ChevronRight } from 'lucide-astro'
 
-// Fetch all published news articles
-let allNews: NewsArticle[] = []
+// For static mode, show page 1 by default
+const page = 1
+const limit = 12
+const offset = (page - 1) * limit
+
+// Fetch paginated news articles
+let articles: NewsArticle[] = []
+let totalArticles = 0
 let categories: Category[] = []
 
 try {
+  // Get total count first
+  const { count, error: countError } = await supabase
+    .from('news')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'published')
+  
+  if (countError) {
+    console.error('Error counting articles:', countError)
+  } else {
+    totalArticles = count || 0
+  }
+
+  // Get paginated articles
   const { data: newsData, error: newsError } = await supabase
     .from('news')
     .select(`
@@ -21,11 +40,12 @@ try {
     `)
     .eq('status', 'published')
     .order('published_at', { ascending: false })
+    .range(offset, offset + limit - 1)
   
   if (newsError) {
     console.error('Error fetching news:', newsError)
   } else {
-    allNews = (newsData || []).map(article => ({
+    articles = (newsData || []).map(article => ({
       ...article,
       tags: article.tags?.map(t => t.tag).filter(Boolean) || []
     }))
@@ -50,23 +70,18 @@ try {
   console.error('Error fetching categories:', error)
 }
 
-// Group articles by year and month for archive display
-const articlesByDate = allNews.reduce((acc, article) => {
-  const date = new Date(article.published_at || article.created_at)
-  const year = date.getFullYear()
-  const month = date.toLocaleDateString('en-US', { month: 'long' })
-  
-  if (!acc[year]) acc[year] = {}
-  if (!acc[year][month]) acc[year][month] = []
-  
-  acc[year][month].push(article)
-  return acc
-}, {} as Record<number, Record<string, NewsArticle[]>>)
+// Calculate pagination
+const totalPages = Math.ceil(totalArticles / limit)
+const hasNextPage = page < totalPages
+const hasPrevPage = page > 1
 
-// Helper to convert month name to two-digit number for URL
-const monthNameToNumber: { [key: string]: string } = {
-  'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06',
-  'July': '07', 'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12'
+// Generate page numbers for pagination
+const pageNumbers: number[] = []
+const startPage = Math.max(1, page - 2)
+const endPage = Math.min(totalPages, page + 2)
+
+for (let i = startPage; i <= endPage; i++) {
+  pageNumbers.push(i)
 }
 ---
 
@@ -87,6 +102,9 @@ const monthNameToNumber: { [key: string]: string } = {
         <p class="text-xl text-primary-100 max-w-3xl mx-auto">
           Browse our complete collection of news articles, announcements, and updates from International School.
         </p>
+        <div class="mt-4 text-primary-200">
+          Page {page} of {totalPages} • {totalArticles} articles total
+        </div>
       </div>
     </div>
   </section>
@@ -95,145 +113,74 @@ const monthNameToNumber: { [key: string]: string } = {
   <section class="py-16 bg-gray-50">
     <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
       
-      <!-- Archive Statistics -->
-      <div class="grid md:grid-cols-4 gap-6 mb-12" style: display:none>
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-          <div class="text-3xl font-bold text-primary-600 mb-2">{allNews.length}</div>
-          <div class="text-gray-600">Total Articles</div>
-        </div>
-        
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-          <div class="text-3xl font-bold text-blue-600 mb-2">{categories.length}</div>
-          <div class="text-gray-600">Categories</div>
-        </div>
-        
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-          <div class="text-3xl font-bold text-green-600 mb-2">{Object.keys(articlesByDate).length}</div>
-          <div class="text-gray-600">Years</div>
-        </div>
-        
-        <div class="bg-white rounded-xl p-6 text-center shadow-sm">
-          <div class="text-3xl font-bold text-purple-600 mb-2">{allNews.filter(a => a.is_featured).length}</div>
-          <div class="text-gray-600">Featured</div>
-        </div>
-      </div>
-
-      <!-- Articles by Date -->
-      <div id="articles-container">
-        {Object.keys(articlesByDate).sort((a, b) => Number(b) - Number(a)).map(year => (
-          <div class="mb-12" data-year={year}>
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 flex items-center">
-              <Calendar class="h-8 w-8 mr-3 text-primary-500" />
-              {year}
-            </h2>
-            
-            {Object.keys(articlesByDate[Number(year)]).map(month => (
-              <div class="mb-8" data-month={month}>
-                <h3 class="text-xl font-semibold text-gray-700 mb-6 border-b border-gray-200 pb-2">
-                  <a href={`/news/${year}/${monthNameToNumber[month]}`} class="hover:text-primary-600">
-                    {month} {year}
-                  </a>
-                </h3>
-                
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {articlesByDate[Number(year)][month].map(article => (
-                    <div 
-                      class="article-item" 
-                      data-category={article.category?.slug || ''}
-                      data-title={article.title.toLowerCase()}
-                      data-excerpt={article.excerpt?.toLowerCase() || ''}
-                    >
-                      <NewsCard article={article} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+      <!-- Articles Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        {articles.map(article => (
+          <NewsCard article={article} />
         ))}
       </div>
 
-      <!-- No Results Message -->
-      <div id="no-results" class="text-center py-12 hidden">
-        <div class="text-gray-400 mb-4">
-          <Search class="h-16 w-16 mx-auto" />
+      <!-- No Articles Message -->
+      {articles.length === 0 && (
+        <div class="text-center py-12">
+          <div class="text-gray-400 mb-4">
+            <Archive class="h-16 w-16 mx-auto" />
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles found</h3>
+          <p class="text-gray-600">There are currently no published articles.</p>
         </div>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles found</h3>
-        <p class="text-gray-600">Try adjusting your search criteria or filters.</p>
-      </div>
+      )}
+
+      <!-- Pagination -->
+      {totalPages > 1 && (
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-xl p-6 shadow-sm">
+          
+          <!-- Previous Button -->
+          <div class="flex-1">
+            <div class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+              <ChevronLeft class="h-4 w-4 mr-2" />
+              Previous
+            </div>
+          </div>
+
+          <!-- Page Numbers -->
+          <div class="flex items-center space-x-1">
+            {pageNumbers.map(pageNum => (
+              <a
+                href={pageNum === 1 ? '/news/archive' : `/news/archive/${pageNum}`}
+                class={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  pageNum === page 
+                    ? 'bg-primary-600 text-white' 
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                }`}
+              >
+                {pageNum}
+              </a>
+            ))}
+          </div>
+
+          <!-- Next Button -->
+          <div class="flex-1 flex justify-end">
+            {hasNextPage ? (
+              <a 
+                href={`/news/archive/2`}
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-primary-600 transition-colors duration-200"
+              >
+                Next
+                <ChevronRight class="h-4 w-4 ml-2" />
+              </a>
+            ) : (
+              <div class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+                Next
+                <ChevronRight class="h-4 w-4 ml-2" />
+              </div>
+            )}
+          </div>
+
+        </div>
+      )}
     </div>
   </section>
 
   <Footer />
 </Layout>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-input') as HTMLInputElement
-    const categoryFilter = document.getElementById('category-filter') as HTMLSelectElement
-    const yearFilter = document.getElementById('year-filter') as HTMLSelectElement
-    const articlesContainer = document.getElementById('articles-container')
-    const noResults = document.getElementById('no-results')
-    
-    if (!searchInput || !categoryFilter || !yearFilter || !articlesContainer || !noResults) return
-    
-    function filterArticles() {
-      const searchTerm = searchInput.value.toLowerCase()
-      const selectedCategory = categoryFilter.value
-      const selectedYear = yearFilter.value
-      
-      const articleItems = document.querySelectorAll('.article-item')
-      const yearSections = document.querySelectorAll('[data-year]')
-      const monthSections = document.querySelectorAll('[data-month]')
-      
-      let visibleCount = 0
-      
-      // Hide all sections first
-      yearSections.forEach(section => {
-        (section as HTMLElement).style.display = 'none'
-      })
-      
-      monthSections.forEach(section => {
-        (section as HTMLElement).style.display = 'none'
-      })
-      
-      articleItems.forEach(item => {
-        const element = item as HTMLElement
-        const title = element.dataset.title || ''
-        const excerpt = element.dataset.excerpt || ''
-        const category = element.dataset.category || ''
-        const yearSection = element.closest('[data-year]') as HTMLElement
-        const monthSection = element.closest('[data-month]') as HTMLElement
-        
-        const matchesSearch = !searchTerm || title.includes(searchTerm) || excerpt.includes(searchTerm)
-        const matchesCategory = !selectedCategory || category === selectedCategory
-        const matchesYear = !selectedYear || yearSection?.dataset.year === selectedYear
-        
-        const isVisible = matchesSearch && matchesCategory && matchesYear
-        
-        element.style.display = isVisible ? 'block' : 'none'
-        
-        if (isVisible) {
-          visibleCount++
-          // Show parent sections
-          if (yearSection) yearSection.style.display = 'block'
-          if (monthSection) monthSection.style.display = 'block'
-        }
-      })
-      
-      // Show/hide no results message
-      if (visibleCount === 0) {
-        articlesContainer.style.display = 'none'
-        noResults.classList.remove('hidden')
-      } else {
-        articlesContainer.style.display = 'block'
-        noResults.classList.add('hidden')
-      }
-    }
-    
-    // Add event listeners
-    searchInput.addEventListener('input', filterArticles)
-    categoryFilter.addEventListener('change', filterArticles)
-    yearFilter.addEventListener('change', filterArticles)
-  })
-</script>
