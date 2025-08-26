@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { supabase } from '../lib/supabase'
+import { getAllDynamicUrls } from '../lib/queries'
 
 // Static pages that don't change
 const staticPages = [
@@ -15,92 +15,13 @@ const staticPages = [
 export const GET: APIRoute = async () => {
   const baseUrl = 'https://your-school-domain.com'
   
-  // Initialize arrays for dynamic content
-  let newsArticles: string[] = []
-  let events: string[] = []
-  let archivePages: string[] = []
-
-  try {
-    // Fetch published news articles
-    const { data: newsData, error: newsError } = await supabase
-      .from('news')
-      .select('slug')
-      .eq('status', 'published')
-    
-    if (!newsError && newsData) {
-      newsArticles = newsData.map(article => `/news/${article.slug}`)
-    }
-
-    // Fetch published events
-    const { data: eventsData, error: eventsError } = await supabase
-      .from('events')
-      .select('slug')
-      .eq('status', 'published')
-    
-    if (!eventsError && eventsData) {
-      events = eventsData.map(event => `/events/${event.slug}`)
-    }
-
-    // Fetch active categories for archive pages
-    const { data: categoriesData, error: categoriesError } = await supabase
-      .from('categories')
-      .select('slug')
-      .eq('is_active', true)
-    
-    if (!categoriesError && categoriesData) {
-      const categoryPages = categoriesData.map(category => `/news/category/${category.slug}`)
-      archivePages.push(...categoryPages)
-    }
-
-    // Fetch active tags for archive pages
-    const { data: tagsData, error: tagsError } = await supabase
-      .from('tags')
-      .select('slug')
-      .eq('is_active', true)
-    
-    if (!tagsError && tagsData) {
-      const tagPages = tagsData.map(tag => `/news/tag/${tag.slug}`)
-      archivePages.push(...tagPages)
-    }
-
-    // Generate date-based archive pages from actual news data
-    if (!newsError && newsData) {
-      const { data: newsWithDates, error: datesError } = await supabase
-        .from('news')
-        .select('published_at')
-        .eq('status', 'published')
-        .not('published_at', 'is', null)
-      
-      if (!datesError && newsWithDates) {
-        const datePages = new Set<string>()
-        
-        newsWithDates.forEach(article => {
-          if (article.published_at) {
-            const date = new Date(article.published_at)
-            const year = date.getFullYear()
-            const month = (date.getMonth() + 1).toString().padStart(2, '0')
-            datePages.add(`/news/${year}/${month}`)
-          }
-        })
-        
-        archivePages.push(...Array.from(datePages))
-      }
-    }
-
-    // Add static archive pages
-    archivePages.push('/news/archive')
-
-  } catch (error) {
-    console.error('Error fetching sitemap data:', error)
-    // Continue with empty arrays if database queries fail
-  }
+  // Fetch all dynamic URLs using centralized queries
+  const dynamicUrls = await getAllDynamicUrls()
 
   // Combine all pages
   const allPages = [
     ...staticPages,
-    ...newsArticles,
-    ...events,
-    ...archivePages
+    ...dynamicUrls
   ]
 
   // Generate sitemap XML

@@ -6,90 +6,14 @@ import Hero from '../../components/Hero.astro'
 import NewsCard from '../../components/NewsCard.astro'
 import EventCard from '../../components/EventCard.astro'
 import CalendarWidget from '../../components/CalendarWidget.astro'
-import { supabase } from '../../lib/supabase'
+import { getFeaturedNews, getUpcomingEvents, getActiveCategories } from '../../lib/queries'
 import type { NewsArticle, Event, Category, Tag } from '../../lib/supabase'
 import { Calendar, Search, Filter, Archive } from 'lucide-astro'
 
-// Fetch news articles from database
-let featuredNews: NewsArticle[] = []
-try {
-  const { data: newsData, error: newsError } = await supabase
-    .from('news')
-    .select(`
-      *,
-      category:categories(*),
-      tags:news_tags(tag:tags(*))
-    `)
-    .eq('status', 'published')
-    .order('is_featured', { ascending: false })
-    .order('published_at', { ascending: false })
-    .limit(9)
-  
-  if (newsError) {
-    console.error('Error fetching news:', newsError)
-  } else {
-    // Transform the data to match the expected format
-    featuredNews = (newsData || []).map(article => ({
-      ...article,
-      tags: article.tags?.map(t => t.tag).filter(Boolean) || []
-    }))
-  }
-} catch (error) {
-  console.error('Error fetching news:', error)
-  featuredNews = []
-}
-
-// Fetch upcoming events from database
-let upcomingEvents: Event[] = []
-try {
-  const currentDate = new Date().toISOString().split('T')[0]
-  const { data: eventsData, error: eventsError } = await supabase
-    .from('events')
-    .select(`
-      *,
-      category:categories(*),
-      tags:event_tags(tag:tags(*))
-    `)
-    .eq('status', 'published')
-    .gte('start_date', currentDate)
-    .order('start_date', { ascending: true })
-  
-  if (eventsError) {
-    console.error('Error fetching events:', eventsError)
-  } else {
-    // Transform the data to match the expected format
-    upcomingEvents = (eventsData || []).map(event => ({
-      ...event,
-      tags: event.tags?.map(t => t.tag).filter(Boolean) || []
-    }))
-  }
-} catch (error) {
-  console.error('Error fetching events:', error)
-  upcomingEvents = []
-}
-
-// Fetch categories from database
-let categories: (Category & { count: number })[] = []
-try {
-  const { data: categoriesData, error: categoriesError } = await supabase
-    .from('categories')
-    .select('id, name, slug')
-    .eq('is_active', true)
-    .order('name')
-  
-  if (categoriesError) {
-    console.error('Error fetching categories:', categoriesError)
-  } else {
-    // For now, we'll set count to 0 - you can implement actual counting later
-    categories = (categoriesData || []).map(category => ({
-      ...category,
-      count: 0
-    }))
-  }
-} catch (error) {
-  console.error('Error fetching categories:', error)
-  categories = []
-}
+// Fetch data using centralized queries
+const featuredNews = await getFeaturedNews(9)
+const upcomingEvents = await getUpcomingEvents()
+const categories = await getActiveCategories()
 ---
 
 <Layout 

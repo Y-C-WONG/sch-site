@@ -7,7 +7,14 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "jest --runInBand",
+    "test:queries": "jest tests/queries.test.ts --runInBand",
+    "test:integration": "jest tests/integration.test.ts --runInBand --timeout=300000",
+    "test:consistency": "jest tests/data-consistency.test.ts --runInBand",
+    "test:build": "npm run build && jest tests/integration.test.ts --runInBand",
+    "test:all": "jest tests/ --runInBand --verbose",
+    "test:watch": "jest tests/ --watch --runInBand"
   },
   "dependencies": {
     "@astrojs/tailwind": "^5.1.2",
@@ -17,5 +24,12 @@
     "lucide-astro": "^0.460.0",
     "marked": "^16.1.1",
     "tailwindcss": "^3.4.1"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.8",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3"
   }
 }

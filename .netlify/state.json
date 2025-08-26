@@ -1,3 +1,21 @@
 {
-	"siteId": "1b27e650-2302-46ad-b6cb-da58a60a500e"
+	"siteId": "1b27e650-2302-46ad-b6cb-da58a60a500e",
+	"geolocation": {
+		"data": {
+			"city": "Wigan",
+			"country": {
+				"code": "GB",
+				"name": "United Kingdom"
+			},
+			"subdivision": {
+				"code": "ENG",
+				"name": "England"
+			},
+			"timezone": "Europe/London",
+			"latitude": 53.5332,
+			"longitude": -2.6117,
+			"postalCode": "WN1"
+		},
+		"timestamp": 1756238657560
+	}
 }

@@ -7,26 +7,12 @@ import { supabase } from '../../../lib/supabase'
 import type { NewsArticle, Tag } from '../../../lib/supabase'
 import { Hash, ArrowLeft } from 'lucide-astro'
 
-export async function getStaticPaths() {
-  try {
-    const { data: tags, error } = await supabase
-      .from('tags')
-      .select('slug, name')
-      .eq('is_active', true)
-    
-    if (error) {
-      console.error('Error fetching tags for static paths:', error)
-      return []
-    }
+import { getAllTagSlugs } from '../../../lib/queries'
 
-    return (tags || []).map(tag => ({
-      params: { slug: tag.slug },
-      props: { slug: tag.slug }
-    }))
-  } catch (error) {
-    console.error('Error in getStaticPaths:', error)
-    return []
-  }
+export const prerender = true;  // static page
+
+export async function getStaticPaths() {
+  return await getAllTagSlugs()
 }
 
 const { slug } = Astro.params

@@ -7,86 +7,18 @@ import { supabase } from '../../lib/supabase'
 import type { Event } from '../../lib/supabase'
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Share2, Tag, Phone, Mail } from 'lucide-astro'
 
-export async function getStaticPaths() {
-  try {
-    const { data: events, error } = await supabase
-      .from('events')
-      .select('slug, title')
-      .eq('status', 'published')
-    
-    if (error) {
-      console.error('Error fetching events for static paths:', error)
-      return []
-    }
+import { getAllEventSlugs, getEventBySlug, getRelatedEvents } from '../../lib/queries'
 
-    return (events || []).map(event => ({
-      params: { slug: event.slug },
-      props: { slug: event.slug }
-    }))
-  } catch (error) {
-    console.error('Error in getStaticPaths:', error)
-    return []
-  }
+export async function getStaticPaths() {
+  return await getAllEventSlugs()
 }
+
 
 const { slug } = Astro.params
 
-// Fetch the specific event
-let event: Event | null = null
-let relatedEvents: Event[] = []
-
-try {
-  const { data: eventData, error: eventError } = await supabase
-    .from('events')
-    .select(`
-      *,
-      category:categories(*),
-      tags:event_tags(tag:tags(*))
-    `)
-    .eq('slug', slug)
-    .eq('status', 'published')
-    .single()
-  
-  if (eventError) {
-    console.error('Error fetching event:', eventError)
-  } else if (eventData) {
-    event = {
-      ...eventData,
-      tags: eventData.tags?.map(t => t.tag).filter(Boolean) || []
-    }
-  }
-} catch (error) {
-  console.error('Error fetching event:', error)
-}
-
-// Fetch related events if we have an event
-if (event) {
-  try {
-    const { data: relatedData, error: relatedError } = await supabase
-      .from('events')
-      .select(`
-        *,
-        category:categories(*),
-        tags:event_tags(tag:tags(*))
-      `)
-      .eq('status', 'published')
-      .eq('category_id', event.category_id)
-      .neq('id', event.id)
-      .limit(3)
-      .order('start_date', { ascending: true })
-    
-    if (relatedError) {
-      console.error('Error fetching related events:', relatedError)
-    } else {
-      relatedEvents = (relatedData || []).map(relatedEvent => ({
-        ...relatedEvent,
-        tags: relatedEvent.tags?.map(t => t.tag).filter(Boolean) || []
-      }))
-    }
-  } catch (error) {
-    console.error('Error fetching related events:', error)
-  }
-}
+// Fetch the specific event and related events using centralized queries
+const event = await getEventBySlug(slug)
+const relatedEvents = event ? await getRelatedEvents(event.category_id, event.id) : []
 
 // If event not found, return 404
 if (!event) {

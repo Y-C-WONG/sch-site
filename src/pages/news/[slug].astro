@@ -7,86 +7,18 @@ import { supabase } from '../../lib/supabase'
 import type { NewsArticle } from '../../lib/supabase'
 import { Calendar, User, Tag, ArrowLeft, Share2, Clock } from 'lucide-astro'
 
-export async function getStaticPaths() {
-  try {
-    const { data: articles, error } = await supabase
-      .from('news')
-      .select('slug, title')
-      .eq('status', 'published')
-    
-    if (error) {
-      console.error('Error fetching news articles for static paths:', error)
-      return []
-    }
+import { getAllNewsArticleSlugs, getArticleBySlug, getRelatedArticles } from '../../lib/queries'
 
-    return (articles || []).map(article => ({
-      params: { slug: article.slug },
-      props: { slug: article.slug }
-    }))
-  } catch (error) {
-    console.error('Error in getStaticPaths:', error)
-    return []
-  }
+export async function getStaticPaths() {
+  return await getAllNewsArticleSlugs()
 }
+
 
 const { slug } = Astro.params
 
-// Fetch the specific article
-let article: NewsArticle | null = null
-let relatedArticles: NewsArticle[] = []
-
-try {
-  const { data: articleData, error: articleError } = await supabase
-    .from('news')
-    .select(`
-      *,
-      category:categories(*),
-      tags:news_tags(tag:tags(*))
-    `)
-    .eq('slug', slug)
-    .eq('status', 'published')
-    .single()
-  
-  if (articleError) {
-    console.error('Error fetching article:', articleError)
-  } else if (articleData) {
-    article = {
-      ...articleData,
-      tags: articleData.tags?.map(t => t.tag).filter(Boolean) || []
-    }
-  }
-} catch (error) {
-  console.error('Error fetching article:', error)
-}
-
-// Fetch related articles if we have an article
-if (article) {
-  try {
-    const { data: relatedData, error: relatedError } = await supabase
-      .from('news')
-      .select(`
-        *,
-        category:categories(*),
-        tags:news_tags(tag:tags(*))
-      `)
-      .eq('status', 'published')
-      .eq('category_id', article.category_id)
-      .neq('id', article.id)
-      .limit(3)
-      .order('published_at', { ascending: false })
-    
-    if (relatedError) {
-      console.error('Error fetching related articles:', relatedError)
-    } else {
-      relatedArticles = (relatedData || []).map(relatedArticle => ({
-        ...relatedArticle,
-        tags: relatedArticle.tags?.map(t => t.tag).filter(Boolean) || []
-      }))
-    }
-  } catch (error) {
-    console.error('Error fetching related articles:', error)
-  }
-}
+// Fetch the specific article and related articles using centralized queries
+const article = await getArticleBySlug(slug)
+const relatedArticles = article ? await getRelatedArticles(article.category_id, article.id) : []
 
 // If article not found, return 404
 if (!article) {

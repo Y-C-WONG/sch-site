@@ -78,6 +78,7 @@ Inside of your Astro project, you'll see the following folders and files:
 - **Database**: [Supabase](https://supabase.com/) - Open source Firebase alternative
 - **Language**: TypeScript for type safety
 - **Icons**: [Lucide](https://lucide.dev/) - Beautiful & consistent icons
+- **Testing**: [Jest](https://jestjs.io/) - Comprehensive test suite
 - **Deployment**: Static hosting compatible (Netlify, Vercel, etc.)
 
 ## 🧞 Commands
@@ -92,6 +93,69 @@ All commands are run from the root of the project, from a terminal:
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 🧪 Testing Commands
+
+The project includes comprehensive automated testing:
+
+| Command                     | Action                                           |
+| :-------------------------- | :----------------------------------------------- |
+| `npm test`                  | Run all tests                                    |
+| `npm run test:queries`      | Test database query functions                    |
+| `npm run test:integration`  | Test build process and page functionality        |
+| `npm run test:consistency`  | Test data structure consistency                  |
+| `npm run test:build`        | Build site and run integration tests            |
+| `npm run test:all`          | Run all tests with verbose output               |
+| `npm run test:watch`        | Run tests in watch mode for development         |
+
+## 🔍 Testing Overview
+
+The project includes a comprehensive test suite with three main test files:
+
+### **tests/queries.test.ts**
+Tests the centralized database query functions:
+- Query function functionality and error handling
+- Database connection and data retrieval
+- Type safety and return value validation
+- Mock testing for development environment
+
+### **tests/integration.test.ts** 
+Tests the overall build process and site functionality:
+- Build process validation (ensures site builds successfully)
+- Critical page generation verification
+- Dynamic route creation from database
+- Sitemap generation and content validation
+- Performance testing (build time limits)
+- Error recovery testing
+
+### **tests/data-consistency.test.ts**
+Tests data structure consistency and validation:
+- Database schema validation
+- Data relationships and integrity
+- Content quality standards (title length, URL formats, etc.)
+- Performance consistency across queries
+- Real-time data validation against baseline
+
+### **Test Configuration**
+- **Environment**: Node.js with Jest and ts-jest
+- **Setup**: `tests/setup.js` handles test environment configuration
+- **Config**: `jest.config.js` configures TypeScript and ESM support
+- **Timeout**: 30-second timeout for database operations
+- **Mode**: Tests run serially to avoid database conflicts
+
+### **Running Tests in Development**
+
+For continuous testing during development:
+```bash
+# Watch mode - automatically runs tests when files change
+npm run test:watch
+
+# Quick query testing
+npm run test:queries
+
+# Full integration testing (includes build)
+npm run test:build
+```
 
 ## Database Schema
 

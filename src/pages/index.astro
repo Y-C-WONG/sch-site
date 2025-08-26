@@ -6,67 +6,12 @@ import Hero from '../components/Hero.astro'
 import NewsCard from '../components/NewsCard.astro'
 import EventCard from '../components/EventCard.astro'
 import CalendarWidget from '../components/CalendarWidget.astro'
-import { supabase } from '../lib/supabase'
-import type { NewsArticle, Event } from '../lib/supabase'
+import { getFeaturedNews, getUpcomingEvents } from '../lib/queries'
 import { BookOpen, Users, Award, Globe, ChevronRight, Play } from 'lucide-astro'
 
-// Fetch featured news from database
-let featuredNews: NewsArticle[] = []
-try {
-  const { data: newsData, error: newsError } = await supabase
-    .from('news')
-    .select(`
-      *,
-      category:categories(*),
-      tags:news_tags(tag:tags(*))
-    `)
-    .eq('status', 'published')
-    .order('is_featured', { ascending: false })
-    .order('published_at', { ascending: false })
-    .limit(5)
-  
-  if (newsError) {
-    console.error('Error fetching news:', newsError)
-  } else {
-    // Transform the data to match the expected format
-    featuredNews = (newsData || []).map(article => ({
-      ...article,
-      tags: article.tags?.map(t => t.tag).filter(Boolean) || []
-    }))
-  }
-} catch (error) {
-  console.error('Error fetching news:', error)
-  featuredNews = []
-}
-
-// Fetch upcoming events from database
-let upcomingEvents: Event[] = []
-try {
-  const currentDate = new Date().toISOString().split('T')[0]
-  const { data: eventsData, error: eventsError } = await supabase
-    .from('events')
-    .select(`
-      *,
-      category:categories(*),
-      tags:event_tags(tag:tags(*))
-    `)
-    .eq('status', 'published')
-    .gte('start_date', currentDate)
-    .order('start_date', { ascending: true })
-  
-  if (eventsError) {
-    console.error('Error fetching events:', eventsError)
-  } else {
-    // Transform the data to match the expected format
-    upcomingEvents = (eventsData || []).map(event => ({
-      ...event,
-      tags: event.tags?.map(t => t.tag).filter(Boolean) || []
-    }))
-  }
-} catch (error) {
-  console.error('Error fetching events:', error)
-  upcomingEvents = []
-}
+// Fetch featured news and events using centralized queries (build-time)
+const featuredNews = await getFeaturedNews(5)
+const upcomingEvents = await getUpcomingEvents()
 ---
 
 <Layout title="International School - Excellence in Education" description="Leading international school providing world-class education from Primary through Sixth Form. Nurturing global citizens through innovative learning and character development.">
