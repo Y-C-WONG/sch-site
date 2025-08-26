@@ -1,0 +1,13 @@
+{
+    "$schema": "https://mintlify.com/docs.json",
+    "theme": "mint",
+    "name": "Your Docs",
+    "colors": {
+        "primary": "#ff0000"
+    },
+     "navigation": {
+        "pages": [
+          "src/pages/blog/posts/first-blog-post"
+        ]
+    }
+}
