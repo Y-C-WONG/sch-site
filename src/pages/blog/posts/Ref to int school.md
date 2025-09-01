@@ -1,3 +1,12 @@
+---
+layout: '../../../layouts/BlogPost.astro'
+title: "Refer to International School"
+description: "Refer to International School blog from old site"
+publishDate: "2025-30-08"
+author: "School Admin"
+tags: ["markdown", "blog"]
+draft: false
+---
 Refer to International School (https://sovereignhousegh.com/international-school/)
 
 Academic year
