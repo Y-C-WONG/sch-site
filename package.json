@@ -17,6 +17,7 @@
     "test:watch": "jest tests/ --watch --runInBand"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.3.4",
     "@astrojs/tailwind": "^5.1.2",
     "@supabase/supabase-js": "^2.52.1",
     "@tailwindcss/typography": "^0.5.10",
